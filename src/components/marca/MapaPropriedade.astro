@@ -1,0 +1,413 @@
+---
+/**
+ * MAPA DA PROPRIEDADE — a paisagem clicável da página inicial.
+ *
+ * Cada elemento é um link para uma seção (destinos em src/data/mapa.ts).
+ * - Mouse: passar por cima mostra o nome e o resumo; clicar abre a seção.
+ * - Toque: o 1º toque mostra o resumo; o 2º toque (ou o botão) abre.
+ * - Teclado: Tab percorre os elementos; Enter abre.
+ * - Sem JavaScript: continua funcionando como links comuns.
+ * No celular o desenho fica mais largo que a tela e desliza para os lados.
+ */
+import { VACA } from '../../../marca/paisagem.mjs';
+import { pontosDoMapa } from '../../data/mapa';
+import { nosDaTaxonomia, guiasPublicos } from '../../lib/conteudo';
+import type { No } from '../../data/taxonomia';
+
+const nos = nosDaTaxonomia();
+const guias = await guiasPublicos();
+const contarPlanejados = (n: No): number =>
+  (n.planejados?.length ?? 0) + (n.filhos ?? []).reduce((s, f) => s + contarPlanejados(f), 0);
+
+const pontos = Object.fromEntries(
+  pontosDoMapa.map((p) => {
+    const no = nos.find((n) => n.caminho === p.caminho);
+    if (!no) throw new Error(`Mapa: seção não encontrada na taxonomia: ${p.caminho}`);
+    const publicados = guias.filter((g) => g.id.startsWith(p.caminho + '/')).length;
+    return [p.id, {
+      ...p,
+      href: `/${p.caminho}/`,
+      nome: no.nome,
+      descricao: no.descricao ?? '',
+      planejados: contarPlanejados(no),
+      publicados,
+    }];
+  }),
+);
+
+/** Atributos comuns de cada link do mapa */
+const link = (id: string) => {
+  const p = pontos[id];
+  return {
+    href: p.href,
+    class: 'ponto',
+    'data-id': id,
+    'data-nome': p.nome,
+    'data-desc': p.descricao,
+    'data-plan': p.planejados,
+    'data-pub': p.publicados,
+    'aria-label': `${p.nome}: ${p.descricao}`,
+  };
+};
+
+/** Etiqueta (nome curto) acima do pino; largura estimada pelo número de letras */
+const etiqueta = (id: string) => {
+  const p = pontos[id];
+  const larg = Math.round(p.rotulo.length * 8.6 + 26);
+  const x = Math.min(Math.max(p.pino[0] - larg / 2, 8), 1192 - larg);
+  return { x, y: p.pino[1] - 46, larg, texto: p.rotulo };
+};
+
+// Tufos de capim no pasto da frente
+const tufos = [30, 140, 330, 380, 520, 660, 760, 1080, 1160, 300, 610, 1110]
+  .map((x, i) => {
+    const y = 360 + (i % 4) * 9;
+    return `M${x} ${y} l3 -10 l3 10 l3 -8 l2 8 l3 -11 l2 11`;
+  })
+  .join(' ');
+
+// Raízes finas do capim, por todo o solo (fora da área da árvore)
+const raizesCapim = [40, 120, 200, 290, 360, 600, 680, 760, 880, 960, 1040, 1130]
+  .map((x, i) => {
+    const c = 14 + (i % 3) * 7;
+    return `M${x} 398 c-2 ${c * .5} -6 ${c * .8} -9 ${c} M${x + 2} 398 c1 ${c * .6} -1 ${c} 1 ${c + 6} M${x + 4} 398 c3 ${c * .4} 7 ${c * .7} 9 ${c - 2}`;
+  })
+  .join(' ');
+
+const postes = [780, 825, 870, 915, 960, 1005, 1050];
+const ordem = pontosDoMapa.map((p) => p.id);
+---
+<section class="mapa" data-mapa aria-labelledby="mapa-titulo">
+  <div class="chamada conteiner">
+    <h1 id="mapa-titulo">Explore a propriedade</h1>
+    <p>Guias práticos e baseados em evidências sobre produção animal agroecológica. Toque em qualquer parte da paisagem para começar.</p>
+  </div>
+
+  <div class="rolagem" data-rolagem>
+    <svg viewBox="0 0 1200 520" role="group" aria-label="Mapa da propriedade: cada parte da paisagem abre uma seção do portal">
+      <!-- Céu (decorativo) -->
+      <rect class="c-ceu" width="1200" height="520" />
+
+      <!-- CLIMA: sol e nuvem -->
+      <a {...link('clima')}>
+        <g class="forma">
+          <circle class="c-sol" cx="1120" cy="72" r="34" />
+          <rect class="c-nuvem" x="945" y="104" width="100" height="22" rx="11" />
+          <circle class="c-nuvem" cx="968" cy="106" r="20" />
+          <circle class="c-nuvem" cx="996" cy="93" r="27" />
+          <circle class="c-nuvem" cx="1024" cy="108" r="18" />
+          <rect class="alvo" x="930" y="30" width="230" height="110" />
+        </g>
+      </a>
+
+      <!-- Colina ao fundo (decorativa) -->
+      <path class="c-colina" d="M0 262 C 160 214, 340 214, 520 246 S 860 268, 1200 222 V520 H0Z" />
+
+      <!-- INFRAESTRUTURA: galpão de ordenha e silo -->
+      <a {...link('infraestrutura')}>
+        <g class="forma">
+          <rect class="c-parede" x="900" y="214" width="118" height="48" />
+          <polygon class="c-telhado" points="888,218 959,184 1030,218" />
+          <rect class="c-escuro" x="942" y="230" width="34" height="32" />
+          <rect class="c-escuro" x="912" y="226" width="16" height="12" />
+          <rect class="c-escuro" x="990" y="226" width="16" height="12" />
+          <rect class="c-parede" x="1024" y="176" width="28" height="86" rx="3" />
+          <path class="c-telhado" d="M1022 180 Q1038 158 1054 180 Z" />
+          <path class="linha-escura" d="M1024 200 H1052 M1024 222 H1052 M1024 244 H1052" />
+        </g>
+      </a>
+
+      <!-- GESTÃO E SOCIEDADE: a casa -->
+      <a {...link('gestao')}>
+        <g class="forma">
+          <rect class="c-parede" x="1082" y="200" width="88" height="46" />
+          <rect class="c-telhado" x="1148" y="168" width="10" height="22" />
+          <polygon class="c-telhado" points="1070,203 1126,170 1182,203" />
+          <rect class="c-escuro" x="1096" y="218" width="18" height="28" />
+          <rect class="c-ceu-janela" x="1132" y="214" width="22" height="16" />
+          <path class="linha-escura" d="M1143 214 V230 M1132 222 H1154" />
+        </g>
+      </a>
+
+      <!-- PASTAGENS: o pasto em primeiro plano -->
+      <a {...link('pastagens')}>
+        <g class="forma">
+          <path class="c-pasto" d="M0 318 C 220 296, 420 292, 640 306 S 980 322, 1200 298 V520 H0Z" />
+          <path class="tufos" d={tufos} />
+        </g>
+      </a>
+
+      <!-- RESTAURAÇÃO: área degradada com muda -->
+      <a {...link('restauracao')}>
+        <g class="forma">
+          <path class="c-exposto" d="M14 330 C 30 318, 70 316, 104 324 C 120 330, 116 344, 96 348 C 70 352, 34 352, 18 346 C 8 342, 6 336, 14 330 Z" />
+          <path class="rachaduras" d="M34 334 l10 6 l8 -4 M70 328 l6 8 l10 2 M88 340 l-8 6" />
+          <path class="caule" d="M60 336 V312" />
+          <path class="c-folha" d="M60 318 C 50 316, 46 308, 48 302 C 56 304, 60 310, 60 318 Z" />
+          <path class="c-folha" d="M60 314 C 70 312, 74 304, 72 298 C 64 300, 60 306, 60 314 Z" />
+          <rect class="c-tronco" x="70" y="304" width="4" height="34" />
+          <rect class="alvo" x="0" y="290" width="124" height="66" />
+        </g>
+      </a>
+
+      <!-- ÁGUA: o açude -->
+      <a {...link('agua')}>
+        <g class="forma">
+          <ellipse class="c-agua" cx="230" cy="352" rx="92" ry="17" />
+          <path class="brilho" d="M182 349 h36 M244 356 h28" />
+          <path class="juncos" d="M134 350 l-4 -18 M140 352 l2 -20 M146 350 l6 -15 M318 350 l-3 -17 M325 352 l3 -19" />
+        </g>
+      </a>
+
+      <!-- ÁRVORES: árvore com sombra -->
+      <a {...link('silvipastoris')}>
+        <g class="forma">
+          <ellipse class="sombra" cx="476" cy="318" rx="66" ry="7" />
+          <path class="c-tronco" d="M462 316 L465 230 Q470 222 475 230 L478 316 Z" />
+          <path class="galho" d="M468 262 L446 236 M473 250 L494 228" />
+          <circle class="c-copa" cx="430" cy="205" r="38" />
+          <circle class="c-copa" cx="512" cy="208" r="40" />
+          <circle class="c-copa" cx="470" cy="186" r="52" />
+          <circle class="c-copa" cx="470" cy="150" r="36" />
+        </g>
+      </a>
+
+      <!-- VACAS LEITEIRAS -->
+      <a {...link('vacas')}>
+        <g class="forma c-vaca">
+          <g transform="translate(548 262) scale(3.3)" set:html={VACA} />
+          <path class="cauda" transform="translate(548 262) scale(3.3)" d="M24.3 1.4 Q26.2 3.6 25.6 8.6" />
+        </g>
+      </a>
+
+      <!-- BEZERRAS -->
+      <a {...link('bezerras')}>
+        <g class="forma c-vaca">
+          <g transform="translate(730 278) scale(-2.15 2.15)" set:html={VACA} />
+          <rect class="alvo" x="668" y="250" width="68" height="62" />
+        </g>
+      </a>
+
+      <!-- PASTOREIO: cerca elétrica dos piquetes -->
+      <a {...link('pastoreio')}>
+        <g class="forma">
+          <path class="fio" d="M780 306 H1050 M780 322 H1050" />
+          {postes.map((x) => <rect class="c-tronco" x={x - 3} y="298" width="6" height="42" rx="1" />)}
+          {postes.map((x) => <><circle class="c-sol" cx={x} cy="306" r="2.6" /><circle class="c-sol" cx={x} cy="322" r="2.6" /></>)}
+          <rect class="alvo" x="770" y="290" width="292" height="56" />
+        </g>
+      </a>
+
+      <!-- SOLO: horizontes A e B, raízes do capim -->
+      <a {...link('solo')}>
+        <g class="forma">
+          <path class="c-solo" d="M0 400 C 300 392, 700 396, 1200 388 V520 H0Z" />
+          <path class="c-solo-fundo" d="M0 478 C 340 472, 760 478, 1200 468 V520 H0Z" />
+          <path class="raizes-finas" d={raizesCapim} />
+          <ellipse class="c-solo-fundo" cx="250" cy="438" rx="6" ry="4" />
+          <ellipse class="c-solo-fundo" cx="720" cy="446" rx="8" ry="5" />
+          <ellipse class="c-solo-fundo" cx="1010" cy="430" rx="5" ry="3.5" />
+          <path class="minhoca" d="M890 440 c6 -6 12 6 18 0 s12 6 18 0" />
+        </g>
+      </a>
+
+      <!-- FUNDAMENTOS: as raízes da árvore -->
+      <a {...link('fundamentos')}>
+        <g class="forma">
+          <path class="raiz-grossa" d="M470 396 C 468 420, 474 440, 470 490" />
+          <path class="raiz" d="M470 402 C 450 412, 430 418, 406 440 M470 402 C 492 412, 514 422, 536 446 M470 418 C 455 430, 446 450, 440 474 M470 418 C 486 432, 496 450, 502 474 M432 424 C 420 426, 410 432, 400 432 M512 430 C 524 434, 532 440, 544 440" />
+          <rect class="alvo" x="392" y="396" width="160" height="96" />
+        </g>
+      </a>
+
+      <!-- Pinos e etiquetas, por cima de tudo (decorativos; os links acima carregam o texto) -->
+      <g class="pinos" aria-hidden="true">
+        {ordem.map((id) => {
+          const [x, y] = pontos[id].pino;
+          const e = etiqueta(id);
+          return (
+            <g class="pino" data-pino={id}>
+              <circle class="pino-anel" cx={x} cy={y} r="11" />
+              <circle class="pino-miolo" cx={x} cy={y} r="4.5" />
+              <g class="etiqueta">
+                <rect x={e.x} y={e.y} width={e.larg} height="30" rx="15" />
+                <text x={e.x + e.larg / 2} y={e.y + 20}>{e.texto}</text>
+              </g>
+            </g>
+          );
+        })}
+      </g>
+    </svg>
+  </div>
+  <p class="deslize conteiner" aria-hidden="true">← Deslize para ver a propriedade inteira →</p>
+
+  <div class="conteiner">
+    <div class="legenda" data-legenda aria-live="polite">
+      <div data-vazio>
+        <p class="rotulo">Mapa da propriedade</p>
+        <p class="dica">Cada parte da paisagem é uma seção do portal. As raízes da árvore levam aos Fundamentos.</p>
+      </div>
+      <div data-cheio hidden>
+        <p class="rotulo" data-campo="contagem"></p>
+        <h2 data-campo="nome"></h2>
+        <p data-campo="desc"></p>
+        <a class="botao" data-campo="abrir" href="/">Abrir seção →</a>
+      </div>
+    </div>
+
+    <ul class="atalhos" aria-label="Seções do mapa">
+      {ordem.map((id) => <li><a href={pontos[id].href} data-atalho={id}>{pontos[id].rotulo}</a></li>)}
+    </ul>
+  </div>
+</section>
+
+<script>
+  const mapa = document.querySelector<HTMLElement>('[data-mapa]');
+  if (mapa) {
+    const pontos = [...mapa.querySelectorAll<SVGAElement>('a.ponto')];
+    const atalhos = [...mapa.querySelectorAll<HTMLAnchorElement>('[data-atalho]')];
+    const vazio = mapa.querySelector<HTMLElement>('[data-vazio]')!;
+    const cheio = mapa.querySelector<HTMLElement>('[data-cheio]')!;
+    const campo = (n: string) => mapa.querySelector<HTMLElement>(`[data-campo="${n}"]`)!;
+    let ativo: string | null = null;
+    let ultimoPonteiro = 'mouse';
+
+    const selecionar = (id: string) => {
+      const p = pontos.find((x) => x.dataset.id === id);
+      if (!p) return;
+      ativo = id;
+      pontos.forEach((x) => x.classList.toggle('ativo', x === p));
+      mapa.querySelectorAll('[data-pino]').forEach((g) => g.classList.toggle('ativo', (g as HTMLElement).dataset.pino === id));
+      atalhos.forEach((a) => a.toggleAttribute('aria-current', a.dataset.atalho === id));
+      const plan = Number(p.dataset.plan), pub = Number(p.dataset.pub);
+      campo('contagem').textContent = pub > 0
+        ? `${pub} de ${plan} guias publicados`
+        : `${plan} guias planejados · em preparação`;
+      campo('nome').textContent = p.dataset.nome ?? '';
+      campo('desc').textContent = p.dataset.desc ?? '';
+      (campo('abrir') as HTMLAnchorElement).href = p.getAttribute('href') ?? '/';
+      vazio.hidden = true;
+      cheio.hidden = false;
+    };
+
+    let ultimoToqueEm = -Infinity;
+    mapa.addEventListener('pointerdown', (e) => {
+      ultimoPonteiro = e.pointerType;
+      ultimoToqueEm = performance.now();
+    }, true);
+    // Passar o mouse seleciona; toque não (o toque tem a regra do clique, abaixo)
+    const aoPassar = (id: string) => (e: PointerEvent) => { if (e.pointerType === 'mouse') selecionar(id); };
+    // Foco vindo do teclado seleciona; foco causado por um toque/clique é ignorado
+    const aoFocar = (id: string) => () => { if (performance.now() - ultimoToqueEm > 600) selecionar(id); };
+
+    pontos.forEach((p) => {
+      const id = p.dataset.id!;
+      p.addEventListener('pointerenter', aoPassar(id));
+      p.addEventListener('focus', aoFocar(id));
+      // No toque, o primeiro toque só mostra o resumo; o segundo abre a seção.
+      p.addEventListener('click', (e) => {
+        if (ultimoPonteiro !== 'mouse' && ultimoPonteiro !== 'pen' && ativo !== id) {
+          e.preventDefault();
+          selecionar(id);
+        }
+      });
+    });
+    atalhos.forEach((a) => {
+      a.addEventListener('pointerenter', aoPassar(a.dataset.atalho!));
+      a.addEventListener('focus', aoFocar(a.dataset.atalho!));
+    });
+
+    // No celular, começa com o centro da propriedade na tela
+    const rolagem = mapa.querySelector<HTMLElement>('[data-rolagem]')!;
+    rolagem.scrollLeft = (rolagem.scrollWidth - rolagem.clientWidth) / 2;
+  }
+</script>
+
+<style>
+  .mapa { position: relative; }
+  .chamada { padding-block: 1.5rem .75rem; }
+  .chamada h1 { margin: 0 0 .4rem; }
+  .chamada p { margin: 0; font-size: 1.2rem; line-height: 1.45; color: var(--tinta-suave); max-width: 34rem; }
+
+  .rolagem { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin; }
+  svg { display: block; width: 100%; min-width: 860px; height: auto; max-width: 1440px; margin: 0 auto; }
+  .deslize { display: none; margin: .5rem auto 0; font-size: var(--t-pequeno); color: var(--tinta-suave); text-align: center; }
+  @media (max-width: 860px) { .deslize { display: block; } }
+  /* Em telas estreitas, corta a faixa de céu vazio do alto */
+  @media (max-width: 999px) { svg { margin-top: calc(-0.075 * max(860px, 100vw)); } .rolagem { overflow-y: hidden; } }
+
+  /* Na tela larga, o título fica no céu, à esquerda */
+  @media (min-width: 1000px) {
+    .mapa { max-width: 1440px; margin: 0 auto; }
+    .chamada {
+      position: absolute; z-index: 2; top: clamp(1rem, 2.4vw, 2.25rem); left: clamp(1rem, 3vw, 3rem);
+      max-width: min(30vw, 26rem); padding: 0;
+    }
+    .chamada h1 { font-size: clamp(2rem, 3vw, 2.8rem); }
+    .chamada p { font-size: 1.1rem; color: var(--tinta); }
+  }
+
+  /* Cores do desenho (tokens ilu-*) */
+  .c-ceu { fill: var(--ilu-ceu); }
+  .c-sol { fill: var(--ilu-sol); }
+  .c-nuvem { fill: var(--ilu-nuvem); }
+  .c-colina { fill: var(--ilu-colina); }
+  .c-pasto { fill: var(--ilu-pasto); }
+  .c-solo { fill: var(--ilu-solo); }
+  .c-solo-fundo { fill: var(--ilu-solo-fundo); }
+  .c-vaca { fill: var(--ilu-vaca); }
+  .c-agua { fill: var(--ilu-agua); }
+  .c-copa { fill: var(--ilu-copa); }
+  .c-tronco { fill: var(--ilu-tronco); }
+  .c-parede { fill: var(--ilu-parede); }
+  .c-telhado { fill: var(--ilu-telhado); }
+  .c-exposto { fill: var(--ilu-solo-exposto); }
+  .c-escuro { fill: var(--ilu-solo-fundo); }
+  .c-ceu-janela { fill: var(--ilu-ceu); }
+  .c-folha { fill: var(--ilu-colina); }
+  .sombra { fill: var(--ilu-vaca); opacity: .18; }
+  .alvo { fill: transparent; }
+  .tufos, .juncos { fill: none; stroke: var(--ilu-colina); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .brilho { fill: none; stroke: var(--ilu-ceu); stroke-width: 3; stroke-linecap: round; }
+  .rachaduras, .linha-escura { fill: none; stroke: var(--ilu-solo-fundo); stroke-width: 1.6; stroke-linecap: round; }
+  .caule { stroke: var(--ilu-pasto); stroke-width: 2.4; }
+  .galho { fill: none; stroke: var(--ilu-tronco); stroke-width: 5; stroke-linecap: round; }
+  .cauda { fill: none; stroke: var(--ilu-vaca); stroke-width: .8; stroke-linecap: round; }
+  .fio { fill: none; stroke: var(--ilu-tronco); stroke-width: 1.6; }
+  .raizes-finas { fill: none; stroke: var(--ilu-raiz); stroke-width: 1.5; stroke-linecap: round; opacity: .55; }
+  .raiz-grossa { fill: none; stroke: var(--ilu-raiz); stroke-width: 6; stroke-linecap: round; }
+  .raiz { fill: none; stroke: var(--ilu-raiz); stroke-width: 3; stroke-linecap: round; }
+  .minhoca { fill: none; stroke: var(--ilu-solo-exposto); stroke-width: 4; stroke-linecap: round; }
+
+  /* Interação */
+  .ponto { cursor: pointer; outline: none; }
+  .ponto .forma { transition: filter .15s ease; }
+  .ponto:hover .forma, .ponto:focus-visible .forma, .ponto.ativo .forma { filter: brightness(1.14) saturate(1.1); }
+
+  .pinos { pointer-events: none; }
+  .pino-anel { fill: var(--superficie); stroke: var(--ceu); stroke-width: 3; transition: r .15s ease; }
+  .pino-miolo { fill: var(--ceu); }
+  .pino.ativo .pino-anel { fill: var(--ceu); stroke: var(--superficie); r: 13; }
+  .pino.ativo .pino-miolo { fill: var(--superficie); }
+  .etiqueta { opacity: 0; transition: opacity .15s ease; }
+  .pino.ativo .etiqueta { opacity: 1; }
+  .etiqueta rect { fill: var(--superficie); stroke: var(--ceu); stroke-width: 2; }
+  .etiqueta text { fill: var(--tinta); font: 700 15px var(--fonte-texto); text-anchor: middle; }
+
+  /* Legenda e atalhos */
+  .legenda {
+    margin-top: 1rem; min-height: 9.5rem; padding: 1.1rem 1.25rem;
+    background: var(--superficie); border: 1px solid var(--borda); border-radius: var(--raio);
+  }
+  .legenda .rotulo { color: var(--ceu); }
+  .legenda h2 { margin: .2rem 0 .3rem; padding: 0; border: 0; font-size: var(--t-h3); }
+  .legenda p { margin: 0 0 .9rem; }
+  .legenda .dica { margin: .4rem 0 0; color: var(--tinta-suave); }
+  .atalhos { display: flex; flex-wrap: wrap; gap: .5rem; list-style: none; padding: 0; margin: 1rem 0 0; }
+  .atalhos a {
+    display: inline-block; padding: .4rem .85rem; border-radius: 999px; text-decoration: none;
+    font-size: .95rem; font-weight: 500; color: var(--tinta);
+    background: var(--superficie); border: 1px solid var(--borda);
+  }
+  .atalhos a:hover, .atalhos a[aria-current] { border-color: var(--ceu); color: var(--ceu); }
+</style>

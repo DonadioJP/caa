@@ -40,6 +40,13 @@
   --ilu-solo-fundo: #5F2E19;
   --ilu-raiz: #E3B48F;
   --ilu-vaca: #24331D;
+  --ilu-nuvem: #FFFFFF;
+  --ilu-agua: #4F93C4;
+  --ilu-copa: #2F6427;
+  --ilu-tronco: #6B4226;
+  --ilu-parede: #F2EEE4;
+  --ilu-telhado: #B4552F;
+  --ilu-solo-exposto: #C4875A;
 
   /* Tipografia — superfamília Alegreya (Huerta Tipográfica, Argentina) */
   --fonte-titulo: 'Alegreya Variable', Georgia, 'Times New Roman', serif;
@@ -68,6 +75,8 @@
     --sol: #E7BE52; --sol-tinta: #2A2312;
     --ilu-ceu: #2E4D66; --ilu-sol: #E8D9A2; --ilu-colina: #4E7A35; --ilu-pasto: #2E5A21;
     --ilu-solo: #6E3720; --ilu-solo-fundo: #4A2414; --ilu-raiz: #C99673; --ilu-vaca: #111611;
+    --ilu-nuvem: #4C6479; --ilu-agua: #2A5878; --ilu-copa: #22481D; --ilu-tronco: #4A2D1A;
+    --ilu-parede: #9C9586; --ilu-telhado: #7E3A20; --ilu-solo-exposto: #845236;
     color-scheme: dark;
   }
 }
@@ -79,6 +88,8 @@
   --sol: #E7BE52; --sol-tinta: #2A2312;
   --ilu-ceu: #2E4D66; --ilu-sol: #E8D9A2; --ilu-colina: #4E7A35; --ilu-pasto: #2E5A21;
   --ilu-solo: #6E3720; --ilu-solo-fundo: #4A2414; --ilu-raiz: #C99673; --ilu-vaca: #111611;
+    --ilu-nuvem: #4C6479; --ilu-agua: #2A5878; --ilu-copa: #22481D; --ilu-tronco: #4A2D1A;
+    --ilu-parede: #9C9586; --ilu-telhado: #7E3A20; --ilu-solo-exposto: #845236;
   color-scheme: dark;
 }
 

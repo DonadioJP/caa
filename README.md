@@ -134,6 +134,29 @@ node marca/gerar-marca.mjs   # SVGs (texto em contornos)
 node marca/gerar-png.cjs     # PNGs (ícone 180/512, assinaturas)
 ```
 
+## Mapa da propriedade (página inicial)
+
+A paisagem da página inicial é um mapa clicável (`src/components/marca/MapaPropriedade.astro`). Os destinos ficam em `src/data/mapa.ts`:
+
+| Elemento | Seção |
+|---|---|
+| Sol e nuvem | Clima e Ambiente |
+| Casa | Gestão, Economia e Sociedade |
+| Galpão e silo | Infraestrutura e Equipamentos |
+| Árvore | Árvores e Sistemas Silvipastoris |
+| Vaca | Bovinocultura de Leite a Pasto |
+| Bezerra | Bezerras |
+| Cerca elétrica | Manejo do Pastoreio |
+| Pasto | Pastagens e Forragem |
+| Açude | Água |
+| Área degradada com muda | Restauração Ecológica |
+| Solo | Solo |
+| Raízes da árvore | Fundamentos |
+
+Nome, descrição e contagem de guias aparecem sozinhos, vindos de `taxonomia.ts`. Para mudar um destino, troque o `caminho` em `mapa.ts`; para mover um marcador, troque `pino`.
+
+Mouse: passar por cima mostra o resumo. Toque: o primeiro toque mostra o resumo, o segundo abre. Teclado: Tab percorre os elementos, Enter abre. No celular o desenho desliza para os lados.
+
 ## Completude dos guias
 
 Cada guia mostra o que já tem: **Texto · Aula · Calculadora · Vídeo**. Um guia pode ser publicado só com texto e referências e ganhar o resto depois.
@@ -150,7 +173,6 @@ O **painel de produção** em `/painel/` compara os guias planejados (em `taxono
 
 ## Pendências
 
-- [ ] Tornar clicável a paisagem da página inicial (céu → Clima e Água, pasto → Pastagens, vacas → Produção, solo → Solo)
 - [ ] Template do resumo em PDF
 - [ ] Componente de árvore de decisão
 - [ ] Primeira calculadora (colostro)

@@ -38,12 +38,12 @@ export const taxonomia: No[] = [
     nome: 'Bases Ecológicas e Manejo da Paisagem',
     descricao: 'Clima, solo, água, árvores, pastagens e restauração — a base de qualquer sistema.',
     filhos: [
-      { slug: 'clima', nome: 'Clima e Ambiente', planejados: [
+      { slug: 'clima', nome: 'Clima e Ambiente', descricao: 'Padrões climáticos, seca, estresse térmico, monitoramento por satélite e pegada de carbono.', planejados: [
         ['padroes-climaticos', 'Padrões climáticos'], ['manejo-seca', 'Manejo de seca'],
         ['estresse-termico', 'Estresse térmico'], ['monitoramento-ndvi', 'Monitoramento com NDVI'],
         ['pegada-carbono', 'Pegada de carbono'],
       ] },
-      { slug: 'solo', nome: 'Solo', planejados: [
+      { slug: 'solo', nome: 'Solo', descricao: 'Estrutura, biologia, matéria orgânica, compactação, amostragem, compostagem e recuperação.', planejados: [
         ['textura-estrutura', 'Textura e estrutura'], ['biologia-do-solo', 'Biologia do solo'],
         ['materia-organica', 'Matéria orgânica'], ['compactacao', 'Compactação'],
         ['infiltracao', 'Infiltração'], ['ph-e-correcao', 'pH e correção'],
@@ -51,29 +51,29 @@ export const taxonomia: No[] = [
         ['compostagem', 'Compostagem'], ['sequestro-carbono', 'Sequestro de carbono'],
         ['degradacao-recuperacao', 'Degradação e recuperação'],
       ] },
-      { slug: 'agua', nome: 'Água', planejados: [
+      { slug: 'agua', nome: 'Água', descricao: 'Exigências hídricas, bebedouros, qualidade da água, matas ciliares e sistemas por gravidade.', planejados: [
         ['exigencias-hidricas', 'Exigências hídricas'], ['bebedouros', 'Bebedouros'],
         ['qualidade-da-agua', 'Qualidade da água'], ['bacias-matas-ciliares', 'Bacias e matas ciliares'],
         ['captacao', 'Captação de água'], ['sistemas-gravidade', 'Sistemas por gravidade'],
       ] },
-      { slug: 'silvipastoris', nome: 'Árvores e Sistemas Silvipastoris', planejados: [
+      { slug: 'silvipastoris', nome: 'Árvores e Sistemas Silvipastoris', descricao: 'Escolha de espécies, sombra, árvores forrageiras, cercas vivas, carbono e biodiversidade.', planejados: [
         ['selecao-especies', 'Seleção de espécies'], ['estabelecimento', 'Estabelecimento'],
         ['manejo-sombra', 'Manejo da sombra'], ['arvores-forrageiras', 'Árvores forrageiras'],
         ['cercas-vivas', 'Cercas vivas'], ['carbono-biodiversidade', 'Carbono e biodiversidade'],
       ] },
-      { slug: 'pastagens', nome: 'Pastagens e Forragem', planejados: [
+      { slug: 'pastagens', nome: 'Pastagens e Forragem', descricao: 'Espécies forrageiras, pastagens polifíticas, leguminosas, qualidade, vazios forrageiros e conservação.', planejados: [
         ['selecao-especies', 'Identificação e seleção de espécies'], ['pastagens-polifiticas', 'Pastagens polifíticas'],
         ['leguminosas', 'Leguminosas'], ['qualidade-forragem', 'Qualidade da forragem'],
         ['vazios-forrageiros', 'Vazios forrageiros'], ['sobressemeadura', 'Sobressemeadura'],
         ['conservacao-forragem', 'Conservação de forragem'],
       ] },
-      { slug: 'pastoreio', nome: 'Manejo do Pastoreio', planejados: [
+      { slug: 'pastoreio', nome: 'Manejo do Pastoreio', descricao: 'Pastoreio Racional Voisin, taxa de lotação, período de descanso, piquetes e calendário de pastejo.', planejados: [
         ['prv', 'Pastoreio Racional Voisin (PRV)'], ['taxa-lotacao', 'Taxa de lotação'],
         ['periodo-descanso', 'Período de descanso'], ['divisao-piquetes', 'Divisão de piquetes'],
         ['sinais-pastejo', 'Sinais de sub e superpastejo'], ['ilp', 'Integração lavoura-pecuária'],
         ['calendario-pastejo', 'Calendário de pastejo'],
       ] },
-      { slug: 'restauracao', nome: 'Restauração Ecológica', planejados: [
+      { slug: 'restauracao', nome: 'Restauração Ecológica', descricao: 'Áreas degradadas, caminhos de recuperação, espécies nativas, fogo, áreas ripárias e monitoramento.', planejados: [
         ['areas-degradadas', 'Identificação de áreas degradadas'], ['caminhos-recuperacao', 'Caminhos de recuperação'],
         ['especies-nativas', 'Espécies nativas'], ['manejo-fogo', 'Manejo do fogo'],
         ['areas-riparias', 'Áreas ripárias'], ['monitoramento', 'Monitoramento'],
@@ -88,8 +88,9 @@ export const taxonomia: No[] = [
       {
         slug: 'bovinocultura-leite',
         nome: 'Bovinocultura de Leite a Pasto',
+        descricao: 'Do nascimento da bezerra à vaca adulta e à ordenha, em sistemas a pasto.',
         filhos: [
-          { slug: 'fundamentos-da-area', nome: 'Fundamentos da Área', planejados: [
+          { slug: 'fundamentos-da-area', nome: 'Fundamentos da Área', descricao: 'Panorama, sistemas de criação, raças, fisiologia, planejamento e comercialização.', planejados: [
             ['panorama', 'Panorama geral'], ['sistemas-criacao', 'Sistemas de criação'],
             ['ciclo-de-vida', 'Ciclo de vida e fases produtivas'], ['racas', 'Raças e recursos genéticos'],
             ['anatomia-fisiologia', 'Anatomia e fisiologia geral'], ['fisiologia-digestiva', 'Anatomia e fisiologia digestiva'],
@@ -98,7 +99,7 @@ export const taxonomia: No[] = [
             ['qualidade-produto', 'Qualidade do produto'], ['comercializacao', 'Comercialização e políticas públicas'],
             ['gestao-pessoas', 'Formação e gestão de pessoas'],
           ] },
-          { slug: 'bezerras', nome: 'Bezerras', planejados: [
+          { slug: 'bezerras', nome: 'Bezerras', descricao: 'Colostro, alimentação, alojamento, desmame e bem-estar nos primeiros meses de vida.', planejados: [
             ['colostro', 'Colostro'], ['alimentacao', 'Alimentação'], ['alojamento', 'Alojamento'],
             ['acesso-pasto', 'Acesso ao pasto'], ['vaca-bezerra', 'Separação vaca-bezerra'],
             ['doencas', 'Doenças'], ['dor', 'Dor e analgesia'], ['higiene', 'Higiene'], ['cama', 'Cama'],
@@ -109,32 +110,32 @@ export const taxonomia: No[] = [
             ['interacao-humano-animal', 'Interação humano-animal'], ['indicadores-comportamentais', 'Indicadores comportamentais'],
             ['crescimento', 'Crescimento e desenvolvimento'],
           ] },
-          { slug: 'novilhas', nome: 'Novilhas', planejados: [
+          { slug: 'novilhas', nome: 'Novilhas', descricao: 'Crescimento, sanidade, condição corporal e manejo reprodutivo até o primeiro parto.', planejados: [
             ['metas-crescimento', 'Metas de crescimento'], ['alimentacao', 'Alimentação'], ['sanidade', 'Sanidade'],
             ['comportamento', 'Comportamento'], ['selecao', 'Seleção'], ['integracao-rebanho', 'Integração ao rebanho'],
             ['condicao-corporal', 'Condição corporal'], ['idade-primeiro-parto', 'Idade ao primeiro parto'],
             ['pastoreio', 'Pastoreio'], ['manejo-reprodutivo', 'Manejo reprodutivo'],
           ] },
-          { slug: 'vacas-adultas', nome: 'Vacas Adultas', planejados: [
+          { slug: 'vacas-adultas', nome: 'Vacas Adultas', descricao: 'Bem-estar, saúde, nutrição na lactação, conforto térmico e longevidade.', planejados: [
             ['bem-estar', 'Bem-estar'], ['saude', 'Saúde metabólica e infecciosa'], ['nutricao-lactacao', 'Nutrição na lactação'],
             ['manejo-lactacao', 'Manejo da lactação'], ['conforto-termico', 'Conforto térmico'],
             ['longevidade-descarte', 'Longevidade e descarte'], ['condicao-corporal', 'Monitoramento da condição corporal'],
           ] },
-          { slug: 'vaca-prenha-seca', nome: 'Vaca Prenha / Seca', planejados: [
+          { slug: 'vaca-prenha-seca', nome: 'Vaca Prenha / Seca', descricao: 'Período seco, transição, parto e os cuidados com a recém-parida.', planejados: [
             ['periodo-seco', 'Período seco'], ['nutricao', 'Nutrição'], ['transicao', 'Período de transição'],
             ['preparacao-parto', 'Preparação para o parto'], ['monitoramento-parto', 'Monitoramento do parto'],
             ['pos-parto', 'Cuidados pós-parto'], ['transtornos-metabolicos', 'Transtornos metabólicos'],
             ['retencao-placenta', 'Retenção de placenta'], ['reinicio-lactacao', 'Reinício da lactação'],
             ['recem-parida', 'Manejo da recém-parida'],
           ] },
-          { slug: 'touro', nome: 'Touro', planejados: [
+          { slug: 'touro', nome: 'Touro', descricao: 'Seleção, bem-estar, nutrição, avaliação andrológica e manejo reprodutivo.', planejados: [
             ['papel', 'O papel do touro'], ['selecao-genetica', 'Seleção genética'], ['comportamento', 'Comportamento e bem-estar'],
             ['nutricao', 'Nutrição'], ['saude', 'Saúde'], ['instalacoes', 'Instalações'], ['manejo-reprodutivo', 'Manejo reprodutivo'],
             ['andrologica', 'Avaliação andrológica'], ['semen', 'Coleta e processamento de sêmen'],
             ['repasse', 'Touro de repasse'], ['integracao-rebanho', 'Integração ao rebanho'],
             ['silvipastoril', 'Touro no silvipastoril'], ['descarte', 'Descarte'], ['registro', 'Registro genealógico'],
           ] },
-          { slug: 'ordenha', nome: 'Manejo de Ordenha', planejados: [
+          { slug: 'ordenha', nome: 'Manejo de Ordenha', descricao: 'Rotina, preparação do úbere, equipamentos, qualidade do leite e mastite.', planejados: [
             ['boas-praticas', 'Boas práticas'], ['preparacao-ubere', 'Preparação do úbere'], ['rotina', 'Rotina de ordenha'],
             ['equipamentos', 'Equipamentos'], ['qualidade-leite', 'Qualidade do leite (CCS, CBT)'], ['mastite', 'Mastite'],
             ['ordenha-a-pasto', 'Ordenha a pasto'], ['bem-estar', 'Bem-estar na ordenha'], ['primiparas', 'Primíparas'],
