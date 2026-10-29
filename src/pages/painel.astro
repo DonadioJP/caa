@@ -12,11 +12,19 @@ const guias = await getCollection('guias'); // inclui rascunhos
 const aulas = new Set((await getCollection('aulas')).map((a) => a.id));
 const roteiros = new Map((await getCollection('roteiros')).map((r) => [r.id, r.data.status]));
 const porId = new Map(guias.map((g) => [g.id, g]));
+const ferramentas = new Map((await getCollection('ferramentas')).map((f) => [f.id, f.data.status]));
+const builds = new Set((await getCollection('builds')).map((b) => b.id));
+const nomeTipo = { ferramenta: 'Ferramenta', 'open-machine': 'Open Machine', apresentacao: 'Apresentação', historia: 'História de dados' } as const;
+const statusMaterial = (tipo: string, id: string) =>
+  tipo === 'ferramenta' ? (ferramentas.get(id) ?? 'não cadastrada')
+  : tipo === 'open-machine' ? (builds.has(id) ? 'rascunho' : 'planejada')
+  : 'planejada';
 
 const secoes = nosDaTaxonomia()
-  .filter((n) => n.planejados?.length)
+  .filter((n) => n.planejados?.length || n.materiais?.length)
   .map((n) => {
-    const linhas = n.planejados!.map(([slug, titulo]) => {
+    const materiais = (n.materiais ?? []).map(([tipo, id, titulo]) => ({ tipo: nomeTipo[tipo], titulo, status: statusMaterial(tipo, id) }));
+    const linhas = (n.planejados ?? []).map(([slug, titulo]) => {
       const id = `${n.caminho}/${slug}`;
       const g = porId.get(id);
       return {
@@ -29,16 +37,17 @@ const secoes = nosDaTaxonomia()
       };
     });
     const feitos = linhas.filter((l) => l.texto === 'publicado').length;
-    return { ...n, linhas, feitos };
+    return { ...n, linhas, feitos, materiais };
   });
 
 const total = secoes.reduce((s, n) => s + n.linhas.length, 0);
 const publicados = secoes.reduce((s, n) => s + n.feitos, 0);
+const totalMateriais = secoes.reduce((s, n) => s + n.materiais.length, 0);
 const marca = (v: unknown) => (v ? '●' : '·');
 ---
 <Base titulo="Painel de produção" semIndice>
   <h1>Painel de produção</h1>
-  <p><strong>{publicados}</strong> de <strong>{total}</strong> guias planejados publicados.</p>
+  <p><strong>{publicados}</strong> de <strong>{total}</strong> guias planejados publicados · <strong>{totalMateriais}</strong> ferramentas, Open Machines e apresentações planejadas.</p>
   <progress max={total} value={publicados}></progress>
 
   {secoes.map((s) => (
@@ -48,7 +57,7 @@ const marca = (v: unknown) => (v ? '●' : '·');
         <span class="conta">{s.feitos}/{s.linhas.length}</span>
       </summary>
       <div class="rolagem">
-        <table>
+        {s.linhas.length > 0 && <table>
           <thead><tr><th>Guia</th><th>Texto</th><th>Aula</th><th>Roteiro</th><th>Vídeo</th><th>Calc.</th></tr></thead>
           <tbody>
             {s.linhas.map((l) => (
@@ -62,7 +71,13 @@ const marca = (v: unknown) => (v ? '●' : '·');
               </tr>
             ))}
           </tbody>
-        </table>
+        </table>}
+        {s.materiais.length > 0 && (
+          <table class="materiais">
+            <thead><tr><th>Material</th><th>Tipo</th><th>Situação</th></tr></thead>
+            <tbody>{s.materiais.map((m) => <tr><td>{m.titulo}</td><td>{m.tipo}</td><td>{m.status}</td></tr>)}</tbody>
+          </table>
+        )}
       </div>
     </details>
   ))}
@@ -77,4 +92,6 @@ const marca = (v: unknown) => (v ? '●' : '·');
   td, th { white-space: nowrap; font-size: .88rem; }
   td:first-child { white-space: normal; min-width: 10rem; }
   tr.vazio { color: var(--tinta-suave); }
+  table.materiais { margin-top: 1rem; }
+  table.materiais th:first-child { color: var(--ceu); }
 </style>

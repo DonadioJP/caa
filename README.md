@@ -1,5 +1,7 @@
 # Criação Animal Agroecológica
 
+> Projeto aberto. Conteúdo sob **CC BY-SA 4.0**, código sob **GPL-3.0-or-later**, fontes sob **SIL OFL**. Detalhes em [LICENCAS.md](LICENCAS.md); para participar, veja [CONTRIBUINDO.md](CONTRIBUINDO.md).
+
 Portal educativo sobre produção animal em bases agroecológicas.
 Feito com [Astro](https://astro.build): o conteúdo é escrito em Markdown/MDX, e o site é gerado como páginas estáticas, leves e rápidas no celular.
 
@@ -176,6 +178,7 @@ O **painel de produção** em `/painel/` compara os guias planejados (em `taxono
 - [ ] Template do resumo em PDF
 - [ ] Componente de árvore de decisão
 - [ ] Primeira calculadora (colostro)
-- [ ] Domínio e hospedagem (Cloudflare Pages ou Netlify)
+- [ ] Repositório público e hospedagem aberta (Codeberg + Codeberg Pages, ou GitHub Pages)
+- [ ] Escolher a instância do PeerTube para o CAATube
 - [ ] Configurar exportação automática do Zotero para `bibliografia/biblioteca.bib`
 - [ ] Substituir o conteúdo de exemplo do guia de colostro

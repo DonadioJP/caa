@@ -24,6 +24,9 @@ const todos = props.tipo === 'secao' ? await guiasPublicos() : [];
 const no = props.tipo === 'secao' ? props.no : null;
 const filhos = (no?.filhos ?? []).filter((f) => f.ativo !== false);
 const guiasAqui = no ? todos.filter((g) => g.id.split('/').slice(0, -1).join('/') === no.caminho) : [];
+// Guias planejados que ainda não foram publicados: aparecem como "Em preparação"
+const publicadosAqui = new Set(guiasAqui.map((g) => g.id.split('/').pop()));
+const emPreparo = (no?.planejados ?? []).filter(([slug]) => !publicadosAqui.has(slug));
 ---
 
 {props.tipo === 'guia' && <Guia guia={props.guia} />}
@@ -36,6 +39,7 @@ const guiasAqui = no ? todos.filter((g) => g.id.split('/').slice(0, -1).join('/'
     <h1>{no.nome}</h1>
     {no.descricao && <p class="descricao">{no.descricao}</p>}
 
+    {filhos.length > 0 && guiasAqui.length > 0 && <h2>Subseções</h2>}
     {filhos.length > 0 && (
       <ul class="cartoes">
         {filhos.map((f) => (
@@ -49,6 +53,7 @@ const guiasAqui = no ? todos.filter((g) => g.id.split('/').slice(0, -1).join('/'
       </ul>
     )}
 
+    {guiasAqui.length > 0 && filhos.length > 0 && <h2>Guias</h2>}
     {guiasAqui.length > 0 && (
       <ul class="cartoes">
         {guiasAqui.map((g) => (
@@ -57,7 +62,13 @@ const guiasAqui = no ? todos.filter((g) => g.id.split('/').slice(0, -1).join('/'
       </ul>
     )}
 
-    {filhos.length === 0 && guiasAqui.length === 0 && <p>Os primeiros guias desta seção estão em preparação.</p>}
+    {emPreparo.length > 0 && (
+      <section class="preparo">
+        <h2>Em preparação</h2>
+        <p>Guias planejados para esta seção. Eles serão publicados aos poucos.</p>
+        <ul>{emPreparo.map(([, titulo]) => <li>{titulo}</li>)}</ul>
+      </section>
+    )}
   </Base>
 )}
 
@@ -66,4 +77,7 @@ const guiasAqui = no ? todos.filter((g) => g.id.split('/').slice(0, -1).join('/'
   .migalhas a { color: var(--tinta-suave); text-decoration: none; }
   .migalhas a:not(:last-child)::after { content: ' ›'; margin-left: .5rem; }
   .descricao { font-size: 1.3rem; line-height: 1.45; color: var(--tinta-suave); margin-top: 0; }
+  .preparo p { color: var(--tinta-suave); margin-top: 0; }
+  .preparo ul { columns: 2 16rem; column-gap: 2rem; padding-left: 1.2rem; color: var(--tinta-suave); }
+  .preparo li { break-inside: avoid; margin-bottom: .35rem; }
 </style>

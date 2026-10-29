@@ -31,3 +31,38 @@
   tipo: shinylive
   src: /ferramentas/indice-transicao/
   status: planejada
+
+- id: autoavaliacao-saude-solo
+  nome: Autoavaliação da Saúde do Solo
+  descricao: Questionário guiado de campo para avaliar a saúde do solo da propriedade.
+  tipo: shinylive
+  src: /ferramentas/autoavaliacao-saude-solo/
+  status: planejada
+
+- id: painel-saude-solo
+  nome: Painel de Saúde do Solo
+  descricao: Acompanhe indicadores de saúde do solo ao longo do tempo.
+  tipo: shinylive
+  src: /ferramentas/painel-saude-solo/
+  status: planejada
+
+- id: simulador-impacto
+  nome: Simulador de Impacto do Pastoreio
+  descricao: Modelo simples do efeito da lotação e do descanso sobre a pastagem.
+  tipo: shinylive
+  src: /ferramentas/simulador-impacto/
+  status: planejada
+
+- id: bem-estar-bezerras
+  nome: Escore de Bem-Estar de Bezerras
+  descricao: Avaliação do bem-estar das bezerras por indicadores de manejo, saúde e comportamento.
+  tipo: shinylive
+  src: /ferramentas/bem-estar-bezerras/
+  status: planejada
+
+- id: calculadora-emergia
+  nome: Calculadora de Análise Emergética
+  descricao: Indicadores emergéticos (ESI, EYR, ELR) da propriedade.
+  tipo: shinylive
+  src: /ferramentas/calculadora-emergia/
+  status: planejada

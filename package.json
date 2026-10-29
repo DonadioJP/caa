@@ -27,5 +27,8 @@
     "@types/node": "^26.6.6",
     "opentype.js": "^2.0.0",
     "typescript": "^6.0.3"
-  }
+  },
+  "license": "GPL-3.0-or-later",
+  "description": "Criação Animal Agroecológica — portal aberto de produção animal em bases agroecológicas",
+  "author": "João Pedro Donadio"
 }

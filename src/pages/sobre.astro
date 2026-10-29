@@ -1,12 +1,31 @@
 ---
 import Base from '../layouts/Base.astro';
+// TODO: trocar pelo endereço definitivo do repositório
+const repositorio = 'https://codeberg.org/';
 ---
 <Base titulo="Sobre">
   <h1>Sobre o portal</h1>
+  <p class="descricao">Um portal aberto sobre produção animal em bases agroecológicas, para produtores, estudantes, pesquisadores e extensionistas.</p>
+
   <h2>Quem faz</h2>
-  <p>João Pedro Donadio — engenheiro agrônomo e pesquisador.</p>
+  <p>João Pedro Donadio, engenheiro agrônomo e pesquisador.</p>
+
   <h2>Como os guias são construídos</h2>
-  <p>[Metodologia de busca e seleção de referências, selos de evidência, revisão.]</p>
-  <h2>Licença</h2>
-  <p>Todo o conteúdo está sob licença <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.pt_BR">Creative Commons BY-SA 4.0</a>.</p>
+  <p>Cada guia parte de uma busca definida na literatura científica, com triagem por título e resumo. O texto separa o que a ciência mostra (em terceira pessoa, com referências) do que se faz no campo (protocolos e checklists) e indica sempre quando a evidência é limitada. O selo de evidência de cada guia resume essa avaliação.</p>
+
+  <h2>Aberto por princípio</h2>
+  <p>O conhecimento sobre como produzir alimentos com a natureza deve circular livremente. Por isso todo o portal é aberto:</p>
+  <ul>
+    <li><strong>Conteúdo</strong> (guias, aulas, vídeos, figuras e a marca) sob <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.pt_BR">Creative Commons BY-SA 4.0</a>: use, adapte e compartilhe, citando a fonte e mantendo a mesma licença.</li>
+    <li><strong>Código</strong> do site e das calculadoras sob <a href="https://www.gnu.org/licenses/gpl-3.0.pt-br.html">GPL-3.0</a>.</li>
+    <li><strong>Ferramentas</strong>: o portal é feito só com software livre, das fontes tipográficas à hospedagem dos vídeos (PeerTube).</li>
+    <li><strong>Sem rastreamento</strong>: o portal não usa cookies de publicidade nem serviços de análise de terceiros.</li>
+  </ul>
+  <p><a class="botao secundario" href={repositorio}>Ver o código-fonte</a></p>
+
+  <h2>Como contribuir</h2>
+  <p>Encontrou um erro, conhece um estudo importante ou tem uma experiência de campo para contar? Contribuições são bem-vindas pelo repositório do projeto.</p>
 </Base>
+<style>
+  .descricao { font-size: 1.3rem; line-height: 1.45; color: var(--tinta-suave); }
+</style>
