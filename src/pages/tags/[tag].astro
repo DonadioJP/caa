@@ -1,0 +1,21 @@
+---
+import Base from '../../layouts/Base.astro';
+import { guiasPublicos, slugTag, urlDoGuia } from '../../lib/conteudo';
+
+export async function getStaticPaths() {
+  const guias = await guiasPublicos();
+  const tags = new Map<string, string>();
+  guias.forEach((g) => g.data.tags.forEach((t) => tags.set(slugTag(t), t)));
+  return [...tags].map(([slug, nome]) => ({
+    params: { tag: slug },
+    props: { nome, guias: guias.filter((g) => g.data.tags.some((t) => slugTag(t) === slug)) },
+  }));
+}
+const { nome, guias } = Astro.props;
+---
+<Base titulo={`#${nome}`}>
+  <h1>#{nome}</h1>
+  <ul class="cartoes">
+    {guias.map((g) => <li><a class="cartao" href={urlDoGuia(g.id)}><strong>{g.data.titulo}</strong><span>{g.data.descricao}</span></a></li>)}
+  </ul>
+</Base>

@@ -1,0 +1,80 @@
+---
+/**
+ * PAINEL DE PRODUÇÃO (/painel/)
+ * Mostra, para cada seção, os guias planejados e o que já existe de cada um:
+ * texto, aula, roteiro, vídeo e calculadora. Não aparece no menu nem no Google.
+ */
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { nosDaTaxonomia } from '../lib/conteudo';
+
+const guias = await getCollection('guias'); // inclui rascunhos
+const aulas = new Set((await getCollection('aulas')).map((a) => a.id));
+const roteiros = new Map((await getCollection('roteiros')).map((r) => [r.id, r.data.status]));
+const porId = new Map(guias.map((g) => [g.id, g]));
+
+const secoes = nosDaTaxonomia()
+  .filter((n) => n.planejados?.length)
+  .map((n) => {
+    const linhas = n.planejados!.map(([slug, titulo]) => {
+      const id = `${n.caminho}/${slug}`;
+      const g = porId.get(id);
+      return {
+        titulo, id,
+        texto: g ? (g.data.rascunho ? 'rascunho' : 'publicado') : null,
+        aula: aulas.has(id),
+        roteiro: roteiros.get(id) ?? null,
+        video: g?.data.video?.status ?? null,
+        calc: Boolean(g?.data.calculadora),
+      };
+    });
+    const feitos = linhas.filter((l) => l.texto === 'publicado').length;
+    return { ...n, linhas, feitos };
+  });
+
+const total = secoes.reduce((s, n) => s + n.linhas.length, 0);
+const publicados = secoes.reduce((s, n) => s + n.feitos, 0);
+const marca = (v: unknown) => (v ? '●' : '·');
+---
+<Base titulo="Painel de produção" semIndice>
+  <h1>Painel de produção</h1>
+  <p><strong>{publicados}</strong> de <strong>{total}</strong> guias planejados publicados.</p>
+  <progress max={total} value={publicados}></progress>
+
+  {secoes.map((s) => (
+    <details open={s.feitos > 0 || s.linhas.some((l) => l.texto)}>
+      <summary>
+        {[...s.ancestrais.map((a) => a.nome), s.nome].join(' › ')}
+        <span class="conta">{s.feitos}/{s.linhas.length}</span>
+      </summary>
+      <div class="rolagem">
+        <table>
+          <thead><tr><th>Guia</th><th>Texto</th><th>Aula</th><th>Roteiro</th><th>Vídeo</th><th>Calc.</th></tr></thead>
+          <tbody>
+            {s.linhas.map((l) => (
+              <tr class:list={{ vazio: !l.texto }}>
+                <td>{l.texto === 'publicado' ? <a href={`/${l.id}/`}>{l.titulo}</a> : l.titulo}</td>
+                <td>{l.texto ?? '—'}</td>
+                <td>{marca(l.aula)}</td>
+                <td>{l.roteiro ?? '—'}</td>
+                <td>{l.video ?? '—'}</td>
+                <td>{marca(l.calc)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </details>
+  ))}
+</Base>
+
+<style>
+  progress { width: 100%; accent-color: var(--verde); }
+  details { border: 1px solid var(--borda); border-radius: var(--raio); margin: .75rem 0; background: var(--cartao); }
+  summary { padding: .75rem 1rem; cursor: pointer; font-weight: 600; display: flex; justify-content: space-between; gap: 1rem; }
+  .conta { color: var(--tinta-suave); font-weight: 400; white-space: nowrap; }
+  .rolagem { overflow-x: auto; padding: 0 1rem 1rem; }
+  td, th { white-space: nowrap; font-size: .88rem; }
+  td:first-child { white-space: normal; min-width: 10rem; }
+  tr.vazio { color: var(--tinta-suave); }
+</style>

@@ -1,0 +1,132 @@
+---
+/**
+ * AULA (Reveal.js)
+ * Estrutura fixa:
+ *   1. Título + descrição            (gerado do guia)
+ *   2. Por que é importante?         (você escreve, em aula.md)
+ *   3. O que você vai aprender       (gerado de `destaques`)
+ *   4–5. Temas e protocolos          (você escreve, em aula.md)
+ *   6. Pontos-chave                  (gerado)
+ *   7. Teste de conhecimento         (gerado do `quiz`, resposta no fragmento seguinte)
+ *   8. Agradecimentos + o portal     (fixo)
+ * Atalhos: S = notas do apresentador · F = tela cheia · Esc = visão geral
+ */
+import { getCollection, getEntry } from 'astro:content';
+import 'reveal.js/reveal.css';
+import 'reveal.js/theme/white.css';
+import '../../styles/aula.css';
+import { secaoDoGuia, urlDoGuia } from '../../lib/conteudo';
+
+export async function getStaticPaths() {
+  const aulas = await getCollection('aulas');
+  const saida = [];
+  for (const aula of aulas) {
+    const guia = await getEntry('guias', aula.id);
+    if (!guia) throw new Error(`aula.md sem guia.mdx na pasta: ${aula.id}`);
+    if (!import.meta.env.DEV && guia.data.rascunho) continue;
+    saida.push({ params: { slug: aula.id }, props: { aula, guia } });
+  }
+  return saida;
+}
+
+const { aula, guia } = Astro.props;
+const a = aula.data;
+const g = guia.data;
+const pontos = a.pontosChave ?? g.emUmMinuto;
+const secao = secaoDoGuia(guia.id);
+
+// Imagens: "./imagens/x.svg" no aula.md → URL final do arquivo
+const arquivos = import.meta.glob('/src/content/guias/**/imagens/*', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
+const prefixo = `/src/content/guias/${aula.id}/imagens/`;
+const corpo = (aula.body ?? '').replace(/\(\.\/imagens\/([^)\s]+)\)/g, (m, nome) => {
+  const url = arquivos[prefixo + nome];
+  return url ? `(${url})` : m;
+});
+// O primeiro slide do aula.md é o "Por que é importante?" e entra antes dos destaques
+const [abertura, ...resto] = corpo.split(/\r?\n---\r?\n/);
+const miolo = resto.join('\n\n---\n\n');
+const letras = 'ABCDE';
+---
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Aula: {g.titulo} · Criação Animal Agroecológica</title>
+    <meta name="robots" content="noindex" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <a class="voltar" href={urlDoGuia(guia.id)}>← Guia</a>
+    <div class="reveal">
+      <div class="slides">
+        <!-- 1. Título -->
+        <section class="capa">
+          {secao && <p class="secao">{secao.nome}</p>}
+          <h1>{g.titulo}</h1>
+          <p class="desc">{g.descricao}</p>
+          <div class="faixa"></div>
+        </section>
+
+        <!-- 2. Por que é importante? (primeiro slide do aula.md) -->
+        <section data-markdown data-separator-notes="^Note:">
+          <textarea data-template set:text={abertura}></textarea>
+        </section>
+
+        <!-- 3. O que você vai aprender -->
+        <section>
+          <p class="rotulo">Nesta aula</p>
+          <h2>O que você vai aprender</h2>
+          <ul>{a.destaques.map((d) => <li class="fragment">{d}</li>)}</ul>
+        </section>
+
+        <!-- 4–5. Temas e protocolos (restante do aula.md) -->
+        {miolo.trim() && (
+          <section data-markdown data-separator="^\r?\n---\r?\n$" data-separator-notes="^Note:">
+            <textarea data-template set:text={miolo}></textarea>
+          </section>
+        )}
+
+        <!-- 6. Pontos-chave -->
+        <section>
+          <p class="rotulo">Para levar</p>
+          <h2>Pontos-chave</h2>
+          <ul>{pontos.map((p) => <li class="fragment">{p}</li>)}</ul>
+        </section>
+
+        <!-- 7. Teste de conhecimento -->
+        <section>
+          <p class="rotulo">Teste seu conhecimento</p>
+          <h2>{a.quiz.multipla.pergunta}</h2>
+          <ol type="A" class="opcoes">
+            {a.quiz.multipla.opcoes.map((o, i) => (
+              <li class:list={[{ 'fragment highlight-green': i === a.quiz.multipla.correta }]} data-fragment-index="1">{o}</li>
+            ))}
+          </ol>
+          {a.quiz.multipla.explicacao && <p class="fragment" data-fragment-index="1"><small>{letras[a.quiz.multipla.correta]}. {a.quiz.multipla.explicacao}</small></p>}
+        </section>
+        <section>
+          <p class="rotulo">Na prática</p>
+          <h2>Para discutir</h2>
+          <ol>{a.quiz.praticas.map((p) => <li>{p}</li>)}</ol>
+        </section>
+
+        <!-- 8. Agradecimentos -->
+        <section class="fim">
+          <h2>Obrigado!</h2>
+          <p>Guia completo, referências e calculadora:</p>
+          <p><strong>Criação Animal Agroecológica</strong></p>
+          <p><small>Ciência, prática e ética para uma pecuária integrada à natureza.<br />Conteúdo sob licença CC BY-SA 4.0.</small></p>
+        </section>
+      </div>
+    </div>
+
+    <script>
+      import Reveal from 'reveal.js';
+      import Markdown from 'reveal.js/plugin/markdown';
+      import Notes from 'reveal.js/plugin/notes';
+      const deck = new Reveal({ hash: true, slideNumber: 'c/t', plugins: [Markdown, Notes] });
+      deck.initialize();
+    </script>
+  </body>
+</html>

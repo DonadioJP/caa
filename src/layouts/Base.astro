@@ -1,0 +1,57 @@
+---
+import '../styles/global.css';
+import { taxonomia } from '../data/taxonomia';
+
+interface Props { titulo: string; descricao?: string; semIndice?: boolean }
+const { titulo, descricao = 'Portal de criação animal agroecológica: ciência, prática e ética.', semIndice = false } = Astro.props;
+const menu = taxonomia.filter((n) => n.ativo !== false);
+---
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titulo} · Criação Animal Agroecológica</title>
+    <meta name="description" content={descricao} />
+    {semIndice && <meta name="robots" content="noindex" />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <header class="topo">
+      <div class="conteiner topo-in">
+        <a href="/" class="marca">Criação Animal <em>Agroecológica</em></a>
+        <details class="menu">
+          <summary>Menu</summary>
+          <nav>
+            <ul>
+              {menu.map((n) => <li><a href={`/${n.slug}/`}>{n.nome}</a></li>)}
+              <li><a href="/caderno/">Caderno de Campo</a></li>
+              <li><a href="/busca/">Buscar</a></li>
+              <li><a href="/sobre/">Sobre</a></li>
+            </ul>
+          </nav>
+        </details>
+      </div>
+    </header>
+    <main class="conteiner" data-pagefind-body={semIndice ? undefined : ''}>
+      <slot />
+    </main>
+    <footer class="rodape conteiner">
+      <p>Conteúdo sob licença <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.pt_BR">CC BY-SA 4.0</a>.</p>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .topo { border-bottom: 1px solid var(--borda); background: var(--cartao); position: sticky; top: 0; z-index: 10; }
+  .topo-in { display: flex; justify-content: space-between; align-items: center; min-height: 3.5rem; }
+  .marca { font-family: var(--fonte-titulo); font-weight: 700; color: var(--tinta); text-decoration: none; }
+  .marca em { color: var(--verde); font-style: normal; }
+  .menu summary { cursor: pointer; list-style: none; font-weight: 600; color: var(--verde); }
+  .menu summary::-webkit-details-marker { display: none; }
+  .menu nav { position: absolute; right: 16px; top: 3.5rem; background: var(--cartao); border: 1px solid var(--borda); border-radius: var(--raio); padding: .5rem 1rem; width: min(22rem, calc(100vw - 32px)); }
+  .menu ul { list-style: none; padding: 0; margin: 0; }
+  .menu li a { display: block; padding: .45rem 0; text-decoration: none; }
+  main { padding-bottom: 3rem; }
+  .rodape { color: var(--tinta-suave); font-size: .85rem; border-top: 1px solid var(--borda); padding-top: 1rem; }
+</style>

@@ -1,0 +1,13 @@
+---
+import type { Completude } from '../../lib/conteudo';
+const { c } = Astro.props as { c: Completude };
+const itens = [
+  ['Texto', c.texto], ['Aula', c.aula], ['Calculadora', c.calculadora], ['Vídeo', c.video],
+] as const;
+---
+<ul class="completude" aria-label="O que este guia inclui">
+  {itens.map(([nome, tem]) => <li class:list={['selo', tem ? 'ativo' : 'inativo']}>{tem ? '✓' : '·'} {nome}</li>)}
+</ul>
+<style>
+  .completude { display: flex; flex-wrap: wrap; gap: .4rem; list-style: none; padding: 0; margin: .5rem 0; }
+</style>

@@ -1,0 +1,69 @@
+---
+/**
+ * Uma única rota gera:
+ *  - a página de cada guia          (/producao/bovinocultura-leite/bezerras/colostro/)
+ *  - a página-índice de cada seção  (/producao/bovinocultura-leite/bezerras/)
+ */
+import Base from '../layouts/Base.astro';
+import Guia from '../layouts/Guia.astro';
+import { guiasPublicos, nosDaTaxonomia, urlDoGuia } from '../lib/conteudo';
+
+export async function getStaticPaths() {
+  const guias = await guiasPublicos();
+  const nos = nosDaTaxonomia().filter((n) => n.ativo !== false);
+  return [
+    ...guias.map((guia) => ({ params: { slug: guia.id }, props: { tipo: 'guia' as const, guia } })),
+    ...nos.map((no) => ({ params: { slug: no.caminho }, props: { tipo: 'secao' as const, no } })),
+  ];
+}
+
+const props = Astro.props;
+
+// Dados para a página de seção
+const todos = props.tipo === 'secao' ? await guiasPublicos() : [];
+const no = props.tipo === 'secao' ? props.no : null;
+const filhos = (no?.filhos ?? []).filter((f) => f.ativo !== false);
+const guiasAqui = no ? todos.filter((g) => g.id.split('/').slice(0, -1).join('/') === no.caminho) : [];
+---
+
+{props.tipo === 'guia' && <Guia guia={props.guia} />}
+
+{no && (
+  <Base titulo={no.nome} descricao={no.descricao}>
+    <nav class="migalhas" aria-label="Você está em">
+      {no.ancestrais.map((m) => <a href={`/${m.caminho}/`}>{m.nome}</a>)}
+    </nav>
+    <h1>{no.nome}</h1>
+    {no.descricao && <p class="descricao">{no.descricao}</p>}
+
+    {filhos.length > 0 && (
+      <ul class="cartoes">
+        {filhos.map((f) => (
+          <li>
+            <a class="cartao" href={`/${no.caminho}/${f.slug}/`}>
+              <strong>{f.nome}</strong>
+              {f.descricao && <span>{f.descricao}</span>}
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+
+    {guiasAqui.length > 0 && (
+      <ul class="cartoes">
+        {guiasAqui.map((g) => (
+          <li><a class="cartao" href={urlDoGuia(g.id)}><strong>{g.data.titulo}</strong><span>{g.data.descricao}</span></a></li>
+        ))}
+      </ul>
+    )}
+
+    {filhos.length === 0 && guiasAqui.length === 0 && <p>Os primeiros guias desta seção estão em preparação.</p>}
+  </Base>
+)}
+
+<style>
+  .migalhas { display: flex; flex-wrap: wrap; gap: .25rem .5rem; font-size: .85rem; margin-top: 1.25rem; }
+  .migalhas a { color: var(--tinta-suave); text-decoration: none; }
+  .migalhas a:not(:last-child)::after { content: ' ›'; margin-left: .5rem; }
+  .descricao { font-size: 1.15rem; color: var(--tinta-suave); margin-top: 0; }
+</style>

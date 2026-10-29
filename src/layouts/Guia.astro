@@ -1,0 +1,83 @@
+---
+/**
+ * TEMPLATE DO GUIA
+ * Ordem na página:
+ *   migalhas → título, descrição, selos, tags → [Iniciar aula] → Em 1 minuto
+ *   → vídeo (se publicado) → texto do guia (Ciência, Práticas, Caderno)
+ *   → calculadora → teste de conhecimento → referências → datas
+ */
+import { getEntry, render } from 'astro:content';
+import Base from './Base.astro';
+import EmUmMinuto from '../components/guia/EmUmMinuto.astro';
+import Completude from '../components/guia/Completude.astro';
+import Quiz from '../components/guia/Quiz.astro';
+import Video from '../components/guia/Video.astro';
+import Calculadora from '../components/guia/Calculadora.astro';
+import { componentesDoGuia } from '../components/guia';
+import { secaoDoGuia, completudeDoGuia, rotulos, urlDaAula, slugTag, type Guia } from '../lib/conteudo';
+
+const { guia } = Astro.props as { guia: Guia };
+const d = guia.data;
+const { Content, remarkPluginFrontmatter } = await render(guia);
+const aula = await getEntry('aulas', guia.id);
+const calc = d.calculadora ? await getEntry(d.calculadora) : undefined;
+const c = await completudeDoGuia(guia);
+const secao = secaoDoGuia(guia.id);
+const migalhas = secao ? [...secao.ancestrais, { nome: secao.nome, caminho: secao.caminho }] : [];
+const data = (dt: Date) => dt.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+---
+<Base titulo={d.titulo} descricao={d.descricao}>
+  <nav class="migalhas" aria-label="Você está em">
+    {migalhas.map((m) => <a href={`/${m.caminho}/`}>{m.nome}</a>)}
+  </nav>
+
+  <header>
+    <h1>{d.titulo}</h1>
+    <p class="descricao">{d.descricao}</p>
+    <div class="selos">
+      <span class="selo">{rotulos.evidencia[d.evidencia]}</span>
+      <span class="selo">{rotulos.nivel[d.nivel]}</span>
+    </div>
+    <Completude c={c} />
+    <ul class="tags">{d.tags.map((t) => <li><a href={`/tags/${slugTag(t)}/`}>#{t}</a></li>)}</ul>
+    {aula && (
+      <div class="acoes">
+        <a class="botao" href={urlDaAula(guia.id)}>▶ Iniciar aula</a>
+        {aula.data.duracaoMin && <span class="duracao">{aula.data.duracaoMin} min</span>}
+      </div>
+    )}
+  </header>
+
+  <EmUmMinuto itens={d.emUmMinuto} />
+
+  {d.video?.status === 'publicado' && d.video.url && <Video url={d.video.url} titulo={d.titulo} />}
+
+  <article class="texto">
+    <Content components={componentesDoGuia} />
+  </article>
+
+  {calc && <Calculadora ferramenta={calc} />}
+  {aula && <Quiz quiz={aula.data.quiz} />}
+
+  {remarkPluginFrontmatter.referenciasHtml && (
+    <section class="referencias">
+      <h2>Referências</h2>
+      <Fragment set:html={remarkPluginFrontmatter.referenciasHtml} />
+    </section>
+  )}
+
+  <p class="datas">
+    Publicado em {data(d.publicado)}{d.revisado && ` · revisado em ${data(d.revisado)}`}
+  </p>
+</Base>
+
+<style>
+  .migalhas { display: flex; flex-wrap: wrap; gap: .25rem .5rem; font-size: .85rem; margin-top: 1.25rem; }
+  .migalhas a { color: var(--tinta-suave); text-decoration: none; }
+  .migalhas a:not(:last-child)::after { content: ' ›'; margin-left: .5rem; }
+  .descricao { font-size: 1.15rem; color: var(--tinta-suave); margin-top: 0; }
+  .selos { display: flex; gap: .4rem; flex-wrap: wrap; }
+  .acoes { margin: 1rem 0; display: flex; gap: .75rem; align-items: center; }
+  .duracao { color: var(--tinta-suave); font-size: .9rem; }
+  .datas { color: var(--tinta-suave); font-size: .85rem; margin-top: 2rem; }
+</style>

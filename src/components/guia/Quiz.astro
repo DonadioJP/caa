@@ -1,0 +1,20 @@
+---
+import type { CollectionEntry } from 'astro:content';
+const { quiz } = Astro.props as { quiz: CollectionEntry<'aulas'>['data']['quiz'] };
+const letras = 'ABCDE';
+---
+<section class="quiz">
+  <h2>Teste seu conhecimento</h2>
+  <p><strong>{quiz.multipla.pergunta}</strong></p>
+  <ol type="A">{quiz.multipla.opcoes.map((o) => <li>{o}</li>)}</ol>
+  <details>
+    <summary>Ver resposta</summary>
+    <p><strong>{letras[quiz.multipla.correta]}.</strong> {quiz.multipla.explicacao}</p>
+  </details>
+  <h3>Para pensar na prática</h3>
+  <ol>{quiz.praticas.map((p) => <li>{p}</li>)}</ol>
+</section>
+<style>
+  details { background: var(--cartao); border: 1px solid var(--borda); border-radius: var(--raio); padding: .5rem 1rem; }
+  summary { cursor: pointer; color: var(--verde); font-weight: 600; }
+</style>

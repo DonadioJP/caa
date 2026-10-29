@@ -1,0 +1,29 @@
+---
+const { titulo = 'Checklist' } = Astro.props;
+---
+<section class="checklist">
+  <p class="rotulo">Checklist</p>
+  <h4>{titulo}</h4>
+  <slot />
+</section>
+<script>
+  // Marca/desmarca itens ao tocar — útil no celular, no campo.
+  document.querySelectorAll<HTMLLIElement>('.checklist li').forEach((li) => {
+    li.setAttribute('role', 'checkbox');
+    li.setAttribute('aria-checked', 'false');
+    li.tabIndex = 0;
+    const alternar = () => li.setAttribute('aria-checked', String(li.getAttribute('aria-checked') !== 'true'));
+    li.addEventListener('click', alternar);
+    li.addEventListener('keydown', (e: KeyboardEvent) => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); alternar(); } });
+  });
+</script>
+<style>
+  .checklist { border: 1px solid var(--borda); border-radius: var(--raio); padding: 1rem 1.25rem; margin: 1.5rem 0; background: var(--cartao); }
+  .rotulo { text-transform: uppercase; letter-spacing: .08em; font-size: .72rem; font-weight: 700; color: var(--terra); margin: 0; }
+  h4 { margin: .2rem 0 .5rem; font-family: var(--fonte-titulo); font-size: 1.1rem; }
+  .checklist :global(ul) { list-style: none; padding: 0; margin: 0; }
+  .checklist :global(li) { position: relative; padding: .35rem 0 .35rem 2rem; cursor: pointer; }
+  .checklist :global(li)::before { content: ''; position: absolute; left: 0; top: .5rem; width: 1.15rem; height: 1.15rem; border: 2px solid var(--terra); border-radius: 4px; }
+  .checklist :global(li[aria-checked='true']) { color: var(--tinta-suave); text-decoration: line-through; }
+  .checklist :global(li[aria-checked='true'])::before { background: var(--verde); border-color: var(--verde); }
+</style>

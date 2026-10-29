@@ -1,0 +1,33 @@
+# Calculadoras e ferramentas interativas.
+# tipo: shinylive (app R/Shiny que roda no navegador, sem servidor)
+#       js        (componente próprio do site)
+#       externo   (link para outro site)
+# Os códigos-fonte R ficam em /ferramentas-shiny/<id>/app.R
+# e são exportados com shinylive para /public/ferramentas/<id>/
+
+- id: calculadora-colostro
+  nome: Calculadora de Colostro
+  descricao: Volume de colostro a fornecer a partir do peso da bezerra e da leitura no refratômetro Brix.
+  tipo: js
+  status: em-desenvolvimento
+
+- id: explorador-pastagens
+  nome: Explorador de Pastagens
+  descricao: Compare espécies forrageiras por clima, solo e uso.
+  tipo: shinylive
+  src: /ferramentas/explorador-pastagens/
+  status: planejada
+
+- id: planejador-prv
+  nome: Planejador de Pastoreio Racional
+  descricao: Calcule número de piquetes, período de ocupação e descanso.
+  tipo: shinylive
+  src: /ferramentas/planejador-prv/
+  status: planejada
+
+- id: indice-transicao
+  nome: Índice de Transição Agroecológica
+  descricao: Autoavaliação do grau de transição agroecológica da propriedade.
+  tipo: shinylive
+  src: /ferramentas/indice-transicao/
+  status: planejada

@@ -1,0 +1,72 @@
+/* Paleta provisória — verde agroecológico, marrom terra, amarelo palha.
+   A identidade visual definitiva vem no próximo passo. */
+:root {
+  --verde: #3f6b2f;
+  --verde-claro: #e6efdc;
+  --terra: #6b4f2e;
+  --terra-claro: #f1e8dc;
+  --palha: #e8c766;
+  --palha-claro: #fbf4dc;
+  --tinta: #1f1d19;
+  --tinta-suave: #5c574e;
+  --fundo: #fdfbf6;
+  --cartao: #ffffff;
+  --borda: #e3dccf;
+  --raio: 10px;
+  --largura: 46rem;
+  --fonte: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --fonte-titulo: Georgia, 'Times New Roman', serif;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --verde: #9cc584; --verde-claro: #1f2c19;
+    --terra: #d1b08a; --terra-claro: #2a2219;
+    --palha: #e8c766; --palha-claro: #2b2614;
+    --tinta: #ece8e0; --tinta-suave: #b3ada2;
+    --fundo: #15140f; --cartao: #1d1c17; --borda: #36332b;
+  }
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--fundo); color: var(--tinta);
+  font-family: var(--fonte); font-size: 1.0625rem; line-height: 1.65;
+}
+h1, h2, h3 { font-family: var(--fonte-titulo); line-height: 1.25; color: var(--tinta); }
+h1 { font-size: clamp(1.8rem, 5vw, 2.5rem); margin: .5rem 0 .75rem; }
+h2 { font-size: 1.5rem; margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid var(--borda); }
+h3 { font-size: 1.15rem; margin-top: 1.75rem; }
+a { color: var(--verde); text-underline-offset: 2px; }
+img { max-width: 100%; height: auto; }
+.conteiner { max-width: var(--largura); margin: 0 auto; padding: 0 16px; }
+table { border-collapse: collapse; width: 100%; font-size: .95rem; }
+th, td { border-bottom: 1px solid var(--borda); padding: .5rem; text-align: left; }
+
+.selo {
+  display: inline-flex; align-items: center; gap: .35rem;
+  font-size: .8rem; font-weight: 600; padding: .2rem .6rem; border-radius: 999px;
+  background: var(--terra-claro); color: var(--terra); border: 1px solid var(--borda);
+}
+.selo.ativo { background: var(--verde-claro); color: var(--verde); }
+.selo.inativo { opacity: .45; }
+.tags { display: flex; flex-wrap: wrap; gap: .4rem; list-style: none; padding: 0; margin: .75rem 0; }
+.tags a { font-size: .85rem; text-decoration: none; color: var(--tinta-suave); }
+.tags a:hover { color: var(--verde); }
+.botao {
+  display: inline-block; padding: .6rem 1rem; border-radius: var(--raio);
+  background: var(--verde); color: var(--fundo); font-weight: 600; text-decoration: none;
+}
+.botao.secundario { background: transparent; color: var(--verde); border: 1px solid var(--verde); }
+.cartoes { display: grid; gap: .75rem; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); padding: 0; list-style: none; }
+.cartao {
+  display: block; background: var(--cartao); border: 1px solid var(--borda); border-radius: var(--raio);
+  padding: 1rem; text-decoration: none; color: inherit;
+}
+.cartao:hover { border-color: var(--verde); }
+.cartao strong { display: block; font-family: var(--fonte-titulo); font-size: 1.1rem; margin-bottom: .25rem; }
+.cartao span { color: var(--tinta-suave); font-size: .92rem; }
+
+/* Citações e bibliografia (rehype-citation) */
+.csl-bib-body { font-size: .92rem; }
+.csl-entry { margin-bottom: .75rem; padding-left: 1.5rem; text-indent: -1.5rem; }

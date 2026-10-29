@@ -1,0 +1,13 @@
+---
+const { itens } = Astro.props as { itens: string[] };
+---
+<section class="minuto" aria-labelledby="minuto-t">
+  <h2 id="minuto-t">Em 1 minuto</h2>
+  <ul>{itens.map((i) => <li>{i}</li>)}</ul>
+</section>
+<style>
+  .minuto { background: var(--verde-claro); border-radius: var(--raio); padding: 1rem 1.25rem; margin: 1.25rem 0; }
+  h2 { font-size: 1rem; margin: 0 0 .5rem; padding: 0; border: 0; font-family: var(--fonte); text-transform: uppercase; letter-spacing: .06em; color: var(--verde); }
+  ul { margin: 0; padding-left: 1.2rem; }
+  li { margin-bottom: .3rem; }
+</style>

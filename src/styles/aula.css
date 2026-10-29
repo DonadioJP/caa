@@ -1,0 +1,27 @@
+/* Tema das aulas — usa a mesma paleta do site */
+.reveal-viewport { background: #fdfbf6; }
+.reveal {
+  --r-main-font: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --r-heading-font: Georgia, 'Times New Roman', serif;
+  --r-main-color: #1f1d19;
+  --r-heading-color: #3f6b2f;
+  --r-link-color: #3f6b2f;
+  --r-selection-background-color: #e8c766;
+  --r-main-font-size: 34px;
+  --r-heading-text-transform: none;
+  --r-heading1-size: 2.2em;
+  --r-heading2-size: 1.5em;
+}
+.reveal .slides { text-align: left; }
+.reveal h1, .reveal h2 { font-weight: 700; }
+.reveal ul, .reveal ol { display: block; margin-left: 1em; }
+.reveal table { font-size: .8em; }
+.reveal .capa { text-align: center; }
+.reveal .capa .secao { color: #6b4f2e; text-transform: uppercase; letter-spacing: .1em; font-size: .6em; }
+.reveal .capa .desc { color: #5c574e; font-size: .8em; max-width: 30em; margin: 0 auto; }
+.reveal .rotulo { color: #6b4f2e; text-transform: uppercase; letter-spacing: .1em; font-size: .55em; font-weight: 700; margin: 0; }
+.reveal .opcoes li.correta { color: #3f6b2f; font-weight: 700; }
+.reveal .fim { text-align: center; }
+.reveal .fim small { color: #5c574e; }
+.reveal .faixa { position: absolute; left: 0; right: 0; bottom: -2em; height: .4em; background: linear-gradient(90deg, #3f6b2f 0 60%, #6b4f2e 60% 85%, #e8c766 85%); }
+.voltar { position: fixed; top: 12px; left: 12px; z-index: 30; font: 600 14px system-ui, sans-serif; color: #3f6b2f; background: #fffc; padding: 6px 10px; border-radius: 8px; text-decoration: none; }

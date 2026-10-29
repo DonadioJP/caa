@@ -1,0 +1,9 @@
+<aside class="caderno">
+  <p class="rotulo">Caderno de Campo</p>
+  <slot />
+</aside>
+<style>
+  .caderno { margin: 2.5rem 0; padding: 1.25rem 1.5rem; background: var(--palha-claro); border-radius: var(--raio); font-family: var(--fonte-titulo); font-style: italic; }
+  .rotulo { font-family: var(--fonte); font-style: normal; text-transform: uppercase; letter-spacing: .08em; font-size: .72rem; font-weight: 700; color: var(--terra); margin: 0 0 .5rem; }
+  .caderno :global(p) { margin: .5rem 0 0; }
+</style>

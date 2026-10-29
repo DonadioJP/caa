@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base titulo="Buscar" semIndice>
+  <h1>Buscar</h1>
+  <div id="busca"></div>
+  <link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
+  <script is:inline src="/pagefind/pagefind-ui.js"></script>
+  <script is:inline>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (window.PagefindUI) new PagefindUI({ element: '#busca', showSubResults: true, translations: { placeholder: 'Buscar nos guias…' } });
+      else document.getElementById('busca').textContent = 'A busca funciona no site publicado (npm run build && npm run preview).';
+    });
+  </script>
+</Base>
