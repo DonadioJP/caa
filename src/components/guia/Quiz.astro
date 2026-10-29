@@ -4,8 +4,8 @@ const { quiz } = Astro.props as { quiz: CollectionEntry<'aulas'>['data']['quiz']
 const letras = 'ABCDE';
 ---
 <section class="quiz">
-  <h2>Teste seu conhecimento</h2>
-  <p><strong>{quiz.multipla.pergunta}</strong></p>
+  <p class="rotulo">Teste seu conhecimento</p>
+  <h2>{quiz.multipla.pergunta}</h2>
   <ol type="A">{quiz.multipla.opcoes.map((o) => <li>{o}</li>)}</ol>
   <details>
     <summary>Ver resposta</summary>
@@ -15,6 +15,13 @@ const letras = 'ABCDE';
   <ol>{quiz.praticas.map((p) => <li>{p}</li>)}</ol>
 </section>
 <style>
-  details { background: var(--cartao); border: 1px solid var(--borda); border-radius: var(--raio); padding: .5rem 1rem; }
-  summary { cursor: pointer; color: var(--verde); font-weight: 600; }
+  .quiz { background: var(--ceu-tinta); border-radius: var(--raio); padding: 1.25rem 1.35rem; margin: 2.75rem 0; }
+  .rotulo { color: var(--ceu); }
+  h2 { margin: .25rem 0 .75rem; font-size: var(--t-h3); border: 0; padding: 0; }
+  h3 { font-size: 1.1rem; margin-top: 1.5rem; }
+  ol { padding-left: 1.5rem; }
+  li { margin-bottom: .3rem; }
+  details { background: var(--superficie); border-radius: var(--raio); padding: .6rem 1rem; }
+  summary { cursor: pointer; color: var(--ceu); font-weight: 700; }
+  details p { margin: .5rem 0 .2rem; }
 </style>

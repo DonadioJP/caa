@@ -1,0 +1,20 @@
+---
+/** Selo de evidência: três barras, como um medidor. */
+const { nivel } = Astro.props as { nivel: 'forte' | 'moderada' | 'limitada' | 'posicionamento' };
+const barras = { forte: 3, moderada: 2, limitada: 1, posicionamento: 0 }[nivel];
+const texto = { forte: 'Evidência forte', moderada: 'Evidência moderada', limitada: 'Evidência limitada', posicionamento: 'Texto de posicionamento' }[nivel];
+---
+<span class="evidencia" title="Força das evidências científicas por trás deste guia">
+  {barras > 0 && (
+    <span class="medidor" aria-hidden="true">
+      {[1, 2, 3].map((i) => <i class:list={{ cheia: i <= barras }} style={`height:${.35 + i * .2}rem`}></i>)}
+    </span>
+  )}
+  {texto}
+</span>
+<style>
+  .evidencia { display: inline-flex; align-items: center; gap: .45rem; font-size: var(--t-pequeno); font-weight: 700; color: var(--terra); }
+  .medidor { display: inline-flex; align-items: flex-end; gap: 2px; height: .95rem; }
+  i { display: block; width: .3rem; border-radius: 1px; background: var(--borda); }
+  i.cheia { background: var(--terra); }
+</style>

@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import Paisagem from '../components/marca/Paisagem.astro';
 import { taxonomia } from '../data/taxonomia';
 import { guiasPublicos, urlDoGuia } from '../lib/conteudo';
 
@@ -7,12 +8,12 @@ const secoes = taxonomia.filter((n) => n.ativo !== false);
 const recentes = (await guiasPublicos()).sort((a, b) => +b.data.publicado - +a.data.publicado).slice(0, 6);
 ---
 <Base titulo="Início">
+  <Paisagem slot="abertura" />
   <section class="hero">
-    <h1>Criação Animal Agroecológica</h1>
-    <p>Ciência, prática e ética para uma pecuária resiliente e integrada à natureza.</p>
+    <h1>Do solo ao leite, a criação animal como parte do ecossistema.</h1>
+    <p>Guias práticos e baseados em evidências para produtores, estudantes e técnicos — com aulas, vídeos e calculadoras.</p>
+    <a class="botao" href="/producao/bovinocultura-leite/">Começar pela bovinocultura de leite</a>
   </section>
-
-  <!-- TODO: mapa interativo SVG do sistema de produção -->
 
   <h2>Seções</h2>
   <ul class="cartoes">
@@ -33,6 +34,7 @@ const recentes = (await guiasPublicos()).sort((a, b) => +b.data.publicado - +a.d
   )}
 </Base>
 <style>
-  .hero { padding: 2.5rem 0 1rem; }
-  .hero p { font-size: 1.2rem; color: var(--tinta-suave); max-width: 32rem; }
+  .hero { padding: 1.75rem 0 .5rem; }
+  .hero h1 { max-width: 20ch; }
+  .hero p { font-size: 1.3rem; line-height: 1.45; color: var(--tinta-suave); max-width: 34rem; margin: 0 0 1.25rem; }
 </style>

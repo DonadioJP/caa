@@ -1,0 +1,8 @@
+---
+// Símbolo da marca, desenhado inline com as cores do tema (claro/escuro).
+import { simbolo, CORES_CSS } from '../../../marca/simbolo.mjs';
+interface Props { tamanho?: string; id?: string; class?: string }
+const { tamanho = '2.75rem', id = 'caa', class: classe } = Astro.props;
+---
+<svg viewBox="0 0 100 100" width={tamanho} height={tamanho} aria-hidden="true" class={classe}
+  set:html={simbolo({ cores: CORES_CSS, id })} />

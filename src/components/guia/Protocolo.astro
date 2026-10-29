@@ -7,9 +7,14 @@ const { titulo = 'Protocolo' } = Astro.props;
   <slot />
 </section>
 <style>
-  .protocolo { background: var(--verde-claro); border-radius: var(--raio); padding: 1rem 1.25rem; margin: 1.5rem 0; }
-  .rotulo { text-transform: uppercase; letter-spacing: .08em; font-size: .72rem; font-weight: 700; color: var(--verde); margin: 0; }
-  h4 { margin: .2rem 0 .5rem; font-family: var(--fonte-titulo); font-size: 1.1rem; }
-  .protocolo :global(ol) { padding-left: 1.25rem; margin: 0; }
-  .protocolo :global(li) { margin-bottom: .4rem; }
+  .protocolo { background: var(--pasto-tinta); border-radius: var(--raio); padding: 1.1rem 1.25rem; margin: 1.75rem 0; }
+  .rotulo { color: var(--pasto); }
+  h4 { margin: .15rem 0 .75rem; font-size: 1.25rem; }
+  .protocolo :global(ol) { list-style: none; counter-reset: passo; padding: 0; margin: 0; display: grid; gap: .6rem; }
+  .protocolo :global(ol > li) { counter-increment: passo; display: grid; grid-template-columns: 2rem 1fr; gap: .6rem; align-items: start; }
+  .protocolo :global(ol > li)::before {
+    content: counter(passo); display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%;
+    background: var(--pasto); color: var(--sobre-pasto); font-weight: 700; font-size: .95rem; font-variant-numeric: tabular-nums;
+  }
+  .protocolo :global(ol > li > p) { margin: .2rem 0 0; }
 </style>

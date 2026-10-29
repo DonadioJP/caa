@@ -1,6 +1,6 @@
-<aside class="dica"><strong>Dica de campo</strong><slot /></aside>
+<aside class="dica"><p class="rotulo">Dica de campo</p><slot /></aside>
 <style>
-  .dica { border-left: 4px solid var(--terra); padding: .5rem 1rem; margin: 1.5rem 0; background: var(--terra-claro); border-radius: 0 var(--raio) var(--raio) 0; }
-  .dica strong { display: block; color: var(--terra); font-size: .85rem; }
-  .dica :global(p) { margin: .25rem 0 0; }
+  .dica { background: var(--terra-tinta); border-radius: var(--raio); padding: .9rem 1.2rem; margin: 1.75rem 0; }
+  .rotulo { color: var(--terra); }
+  .dica :global(p:last-child) { margin: .25rem 0 0; }
 </style>

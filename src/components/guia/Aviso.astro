@@ -1,5 +1,6 @@
-<aside class="aviso"><slot /></aside>
+<aside class="aviso"><p class="rotulo">Atenção</p><slot /></aside>
 <style>
-  .aviso { background: var(--palha-claro); border-left: 4px solid var(--palha); padding: .75rem 1rem; border-radius: 0 var(--raio) var(--raio) 0; font-size: .95rem; }
-  .aviso :global(p) { margin: 0; }
+  .aviso { background: var(--sol-tinta); border-left: 4px solid var(--sol); padding: .8rem 1.1rem; border-radius: 0 var(--raio) var(--raio) 0; margin: 1.5rem 0; }
+  .rotulo { color: var(--sol); }
+  .aviso :global(p:last-child) { margin: .2rem 0 0; }
 </style>

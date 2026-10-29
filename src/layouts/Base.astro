@@ -1,5 +1,12 @@
 ---
+import '@fontsource-variable/alegreya/wght.css';
+import '@fontsource-variable/alegreya/wght-italic.css';
+import '@fontsource/alegreya-sans/400.css';
+import '@fontsource/alegreya-sans/400-italic.css';
+import '@fontsource/alegreya-sans/500.css';
+import '@fontsource/alegreya-sans/700.css';
 import '../styles/global.css';
+import Simbolo from '../components/marca/Simbolo.astro';
 import { taxonomia } from '../data/taxonomia';
 
 interface Props { titulo: string; descricao?: string; semIndice?: boolean }
@@ -10,16 +17,21 @@ const menu = taxonomia.filter((n) => n.ativo !== false);
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{titulo} · Criação Animal Agroecológica</title>
     <meta name="description" content={descricao} />
+    <meta name="theme-color" content="#3B6B2A" />
     {semIndice && <meta name="robots" content="noindex" />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/marca/caa-icone-180.png" />
   </head>
   <body>
     <header class="topo">
       <div class="conteiner topo-in">
-        <a href="/" class="marca">Criação Animal <em>Agroecológica</em></a>
+        <a href="/" class="marca" aria-label="Criação Animal Agroecológica — início">
+          <Simbolo tamanho="2.6rem" id="topo" />
+          <span class="nome"><span>Criação Animal</span><em>Agroecológica</em></span>
+        </a>
         <details class="menu">
           <summary>Menu</summary>
           <nav>
@@ -33,25 +45,51 @@ const menu = taxonomia.filter((n) => n.ativo !== false);
         </details>
       </div>
     </header>
+    <slot name="abertura" />
     <main class="conteiner" data-pagefind-body={semIndice ? undefined : ''}>
       <slot />
     </main>
-    <footer class="rodape conteiner">
-      <p>Conteúdo sob licença <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.pt_BR">CC BY-SA 4.0</a>.</p>
+    <footer class="rodape">
+      <div class="faixa" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div class="conteiner rodape-in">
+        <Simbolo tamanho="2rem" id="rodape" />
+        <p>Criação Animal Agroecológica · Conteúdo sob licença <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.pt_BR">CC BY-SA 4.0</a></p>
+      </div>
     </footer>
   </body>
 </html>
 
 <style>
-  .topo { border-bottom: 1px solid var(--borda); background: var(--cartao); position: sticky; top: 0; z-index: 10; }
-  .topo-in { display: flex; justify-content: space-between; align-items: center; min-height: 3.5rem; }
-  .marca { font-family: var(--fonte-titulo); font-weight: 700; color: var(--tinta); text-decoration: none; }
-  .marca em { color: var(--verde); font-style: normal; }
-  .menu summary { cursor: pointer; list-style: none; font-weight: 600; color: var(--verde); }
+  .topo {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10;
+    background: var(--superficie); border-bottom: 1px solid var(--borda);
+  }
+  .topo-in { display: flex; justify-content: space-between; align-items: center; gap: 1rem; min-height: 4rem; position: relative; }
+  .marca { display: flex; align-items: center; gap: .6rem; text-decoration: none; color: var(--tinta); }
+  .nome { display: flex; flex-direction: column; font-family: var(--fonte-titulo); line-height: 1.02; }
+  .nome span { font-weight: 800; font-size: 1.1rem; }
+  .nome em { font-weight: 500; font-size: 1.05rem; color: var(--pasto); }
+  .menu summary {
+    cursor: pointer; list-style: none; font-weight: 700; color: var(--pasto);
+    padding: .45rem .8rem; border-radius: var(--raio); box-shadow: inset 0 0 0 1.5px var(--pasto);
+  }
   .menu summary::-webkit-details-marker { display: none; }
-  .menu nav { position: absolute; right: 16px; top: 3.5rem; background: var(--cartao); border: 1px solid var(--borda); border-radius: var(--raio); padding: .5rem 1rem; width: min(22rem, calc(100vw - 32px)); }
+  .menu[open] summary { background: var(--pasto); color: var(--sobre-pasto); }
+  .menu nav {
+    position: absolute; right: max(16px, env(safe-area-inset-right, 0px)); top: calc(100% + 6px);
+    background: var(--superficie); border: 1px solid var(--borda); border-radius: var(--raio);
+    padding: .5rem 1.1rem; width: min(22rem, calc(100vw - 32px)); box-shadow: 0 10px 30px rgb(0 0 0 / .12);
+  }
   .menu ul { list-style: none; padding: 0; margin: 0; }
-  .menu li a { display: block; padding: .45rem 0; text-decoration: none; }
-  main { padding-bottom: 3rem; }
-  .rodape { color: var(--tinta-suave); font-size: .85rem; border-top: 1px solid var(--borda); padding-top: 1rem; }
+  .menu li + li { border-top: 1px solid var(--borda); }
+  .menu li a { display: block; padding: .6rem 0; text-decoration: none; color: var(--tinta); }
+  .menu li a:hover { color: var(--ceu); }
+  main { padding-bottom: 3.5rem; }
+  .rodape { margin-top: 2rem; background: var(--superficie); }
+  .faixa { display: grid; grid-template-columns: 5fr 3fr 4fr; height: 6px; }
+  .faixa span:nth-child(1) { background: var(--ilu-ceu); }
+  .faixa span:nth-child(2) { background: var(--ilu-pasto); }
+  .faixa span:nth-child(3) { background: var(--ilu-solo); }
+  .rodape-in { display: flex; align-items: center; gap: .75rem; padding-block: 1.25rem; }
+  .rodape p { margin: 0; color: var(--tinta-suave); font-size: var(--t-pequeno); }
 </style>

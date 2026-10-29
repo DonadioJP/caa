@@ -12,10 +12,14 @@
  * Atalhos: S = notas do apresentador · F = tela cheia · Esc = visão geral
  */
 import { getCollection, getEntry } from 'astro:content';
+import '@fontsource-variable/alegreya/wght.css';
+import '@fontsource/alegreya-sans/400.css';
+import '@fontsource/alegreya-sans/700.css';
 import 'reveal.js/reveal.css';
 import 'reveal.js/theme/white.css';
 import '../../styles/aula.css';
 import { secaoDoGuia, urlDoGuia } from '../../lib/conteudo';
+import Simbolo from '../../components/marca/Simbolo.astro';
 
 export async function getStaticPaths() {
   const aulas = await getCollection('aulas');
@@ -46,6 +50,14 @@ const corpo = (aula.body ?? '').replace(/\(\.\/imagens\/([^)\s]+)\)/g, (m, nome)
 const [abertura, ...resto] = corpo.split(/\r?\n---\r?\n/);
 const miolo = resto.join('\n\n---\n\n');
 const letras = 'ABCDE';
+// Paisagem como fundo de tela inteira na capa e no encerramento
+const fundoPaisagem = {
+  'data-background-image': '/marca/paisagem.svg',
+  'data-background-size': '100% auto',
+  'data-background-position': 'bottom',
+  'data-background-repeat': 'no-repeat',
+  'data-background-color': '#F7F9F5',
+};
 ---
 <!doctype html>
 <html lang="pt-BR">
@@ -61,11 +73,11 @@ const letras = 'ABCDE';
     <div class="reveal">
       <div class="slides">
         <!-- 1. Título -->
-        <section class="capa">
+        <section class="capa" {...fundoPaisagem}>
+          <div class="marca-capa"><Simbolo tamanho="1.8em" id="capa" /> Criação Animal Agroecológica</div>
           {secao && <p class="secao">{secao.nome}</p>}
           <h1>{g.titulo}</h1>
           <p class="desc">{g.descricao}</p>
-          <div class="faixa"></div>
         </section>
 
         <!-- 2. Por que é importante? (primeiro slide do aula.md) -->
@@ -96,7 +108,7 @@ const letras = 'ABCDE';
 
         <!-- 7. Teste de conhecimento -->
         <section>
-          <p class="rotulo">Teste seu conhecimento</p>
+          <p class="rotulo ceu">Teste seu conhecimento</p>
           <h2>{a.quiz.multipla.pergunta}</h2>
           <ol type="A" class="opcoes">
             {a.quiz.multipla.opcoes.map((o, i) => (
@@ -106,13 +118,14 @@ const letras = 'ABCDE';
           {a.quiz.multipla.explicacao && <p class="fragment" data-fragment-index="1"><small>{letras[a.quiz.multipla.correta]}. {a.quiz.multipla.explicacao}</small></p>}
         </section>
         <section>
-          <p class="rotulo">Na prática</p>
+          <p class="rotulo terra">Na prática</p>
           <h2>Para discutir</h2>
           <ol>{a.quiz.praticas.map((p) => <li>{p}</li>)}</ol>
         </section>
 
         <!-- 8. Agradecimentos -->
-        <section class="fim">
+        <section class="fim" {...fundoPaisagem}>
+          <div class="marca-capa"><Simbolo tamanho="1.8em" id="fim" /></div>
           <h2>Obrigado!</h2>
           <p>Guia completo, referências e calculadora:</p>
           <p><strong>Criação Animal Agroecológica</strong></p>

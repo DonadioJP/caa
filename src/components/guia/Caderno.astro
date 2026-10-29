@@ -3,7 +3,15 @@
   <slot />
 </aside>
 <style>
-  .caderno { margin: 2.5rem 0; padding: 1.25rem 1.5rem; background: var(--palha-claro); border-radius: var(--raio); font-family: var(--fonte-titulo); font-style: italic; }
-  .rotulo { font-family: var(--fonte); font-style: normal; text-transform: uppercase; letter-spacing: .08em; font-size: .72rem; font-weight: 700; color: var(--terra); margin: 0 0 .5rem; }
-  .caderno :global(p) { margin: .5rem 0 0; }
+  .caderno {
+    margin: 2.75rem 0; padding: 1.3rem 1.5rem; border-radius: var(--raio);
+    background: var(--sol-tinta);
+    font-family: var(--fonte-titulo); font-style: italic; font-size: 1.15rem; line-height: 1.7em;
+  }
+  .rotulo { color: var(--terra); font-style: normal; }
+  /* Pautas do caderno, alinhadas a cada linha do texto */
+  .caderno :global(p) {
+    margin: .4rem 0 0;
+    background: repeating-linear-gradient(to bottom, transparent 0 calc(1.7em - 1px), color-mix(in srgb, var(--terra) 22%, transparent) calc(1.7em - 1px) 1.7em);
+  }
 </style>

@@ -113,6 +113,27 @@ video:
   duracao: "6:40"
 ```
 
+## Identidade visual
+
+O conceito é **o corte da paisagem**: céu, pasto e solo. Cada camada tem uma função na interface:
+
+| Camada | Token | Função |
+|---|---|---|
+| Pasto (verde) | `--pasto` | a marca e a prática: botão, "Em 1 minuto", Protocolo |
+| Céu (azul) | `--ceu` | aprender: links, aula, vídeo, teste, calculadora |
+| Terra (marrom) | `--terra` | o campo: Dica, Checklist, Caderno, selo de evidência |
+| Sol (âmbar) | `--sol` | só avisos |
+
+- Cores, fontes e escala: `src/styles/global.css` (temas Dia e Anoitecer). Todo texto passa contraste AA.
+- Fontes: Alegreya (títulos) e Alegreya Sans (texto), servidas pelo próprio site.
+- O desenho do símbolo e da paisagem fica em `marca/simbolo.mjs` e `marca/paisagem.mjs`; o site e os arquivos da marca usam o mesmo desenho.
+- Para regenerar os arquivos da marca em `public/marca/` e o favicon:
+
+```bash
+node marca/gerar-marca.mjs   # SVGs (texto em contornos)
+node marca/gerar-png.cjs     # PNGs (ícone 180/512, assinaturas)
+```
+
 ## Completude dos guias
 
 Cada guia mostra o que já tem: **Texto · Aula · Calculadora · Vídeo**. Um guia pode ser publicado só com texto e referências e ganhar o resto depois.
@@ -129,8 +150,7 @@ O **painel de produção** em `/painel/` compara os guias planejados (em `taxono
 
 ## Pendências
 
-- [ ] Identidade visual (cores definitivas, logo, tipografia, favicon)
-- [ ] Mapa interativo SVG da página inicial
+- [ ] Tornar clicável a paisagem da página inicial (céu → Clima e Água, pasto → Pastagens, vacas → Produção, solo → Solo)
 - [ ] Template do resumo em PDF
 - [ ] Componente de árvore de decisão
 - [ ] Primeira calculadora (colostro)

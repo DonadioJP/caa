@@ -1,0 +1,14 @@
+---
+/**
+ * O corte da paisagem em formato largo — a abertura da página inicial.
+ * Próximo passo: tornar cada camada clicável (céu → Clima e Água,
+ * pasto → Pastagens e Pastoreio, vacas → Áreas de Produção, solo → Solo).
+ */
+import { paisagem } from '../../../marca/paisagem.mjs';
+import { CORES_CSS } from '../../../marca/simbolo.mjs';
+---
+<svg class="paisagem" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true"
+  set:html={paisagem({ cores: CORES_CSS })} />
+<style>
+  .paisagem { display: block; width: 100%; height: clamp(150px, 26vw, 260px); }
+</style>

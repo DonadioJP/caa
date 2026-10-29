@@ -4,15 +4,18 @@ const { ferramenta } = Astro.props as { ferramenta: CollectionEntry<'ferramentas
 const { nome, descricao, tipo, src, status } = ferramenta.data;
 ---
 <section class="calc">
-  <h2>Calculadora: {nome}</h2>
+  <p class="rotulo">Calculadora</p>
+  <h2>{nome}</h2>
   <p>{descricao}</p>
-  {status !== 'pronta' && <p class="selo">Em desenvolvimento</p>}
-  {status === 'pronta' && tipo === 'shinylive' && (
-    <iframe src={src} title={nome} loading="lazy"></iframe>
-  )}
+  {status !== 'pronta' && <p class="breve">Em desenvolvimento</p>}
+  {status === 'pronta' && tipo === 'shinylive' && <iframe src={src} title={nome} loading="lazy"></iframe>}
   {status === 'pronta' && tipo === 'externo' && <a class="botao" href={src}>Abrir calculadora</a>}
   {/* tipo js: importe o componente da calculadora aqui quando existir */}
 </section>
 <style>
+  .calc { border: 1.5px solid color-mix(in srgb, var(--ceu) 45%, var(--borda)); border-radius: var(--raio); background: var(--superficie); padding: 1.2rem 1.35rem; margin: 2.75rem 0; }
+  .rotulo { color: var(--ceu); }
+  h2 { margin: .25rem 0 .25rem; font-size: var(--t-h3); border: 0; padding: 0; }
+  .breve { display: inline-block; margin: 0; font-size: var(--t-pequeno); font-weight: 700; color: var(--tinta-suave); background: var(--fundo); padding: .3rem .7rem; border-radius: 999px; }
   iframe { width: 100%; min-height: 32rem; border: 1px solid var(--borda); border-radius: var(--raio); }
 </style>

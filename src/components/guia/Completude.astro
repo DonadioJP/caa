@@ -1,13 +1,16 @@
 ---
 import type { Completude } from '../../lib/conteudo';
 const { c } = Astro.props as { c: Completude };
-const itens = [
-  ['Texto', c.texto], ['Aula', c.aula], ['Calculadora', c.calculadora], ['Vídeo', c.video],
-] as const;
+const itens = [['Texto', c.texto], ['Aula', c.aula], ['Calculadora', c.calculadora], ['Vídeo', c.video]] as const;
 ---
 <ul class="completude" aria-label="O que este guia inclui">
-  {itens.map(([nome, tem]) => <li class:list={['selo', tem ? 'ativo' : 'inativo']}>{tem ? '✓' : '·'} {nome}</li>)}
+  {itens.map(([nome, tem]) => (
+    <li class:list={{ tem }}><span aria-hidden="true">{tem ? '●' : '○'}</span>{nome}<span class="sr">{tem ? ' (disponível)' : ' (em preparação)'}</span></li>
+  ))}
 </ul>
 <style>
-  .completude { display: flex; flex-wrap: wrap; gap: .4rem; list-style: none; padding: 0; margin: .5rem 0; }
+  .completude { display: flex; flex-wrap: wrap; gap: .25rem 1rem; list-style: none; padding: 0; margin: .6rem 0; font-size: var(--t-pequeno); color: var(--tinta-suave); }
+  li { display: flex; align-items: center; gap: .3rem; }
+  li.tem { color: var(--ceu); font-weight: 500; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 </style>
