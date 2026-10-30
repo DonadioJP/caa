@@ -49,6 +49,14 @@ const guias = defineCollection({
      *  posicionamento → texto ético/filosófico (seção Fundamentos)
      */
     evidencia: z.enum(['forte', 'moderada', 'limitada', 'posicionamento']),
+    /**
+     * Achado principal de cada referência citada, para a tabela de
+     * Referências. Chave = chave do .bib. Faltou uma? A tabela mostra "—"
+     * e o build avisa no terminal.
+     *   achados:
+     *     godden2008: "Frase curta com o achado principal."
+     */
+    achados: z.record(z.string(), z.string()).default({}),
 
     /**
      * Vídeo — independente dos slides.

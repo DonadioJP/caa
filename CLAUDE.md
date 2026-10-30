@@ -46,7 +46,7 @@ Ordem: cabeçalho (título, tags) → botões "Iniciar aula" e "Resumo em PDF" �
 - *A ciência por trás*, com subestrutura fixa: Contexto e importância; Mecanismos; Resumo das evidências; Controvérsias, lacunas e limitações; Direções futuras.
 - *Práticas no campo*: protocolos numerados, métodos e equipamentos, checklists, árvores de decisão, dicas, links para guias relacionados.
 - *Exemplo real*: vídeo do CAATube, entrevista ou estudo de caso.
-- *Referências*: tabela com título, achado principal e link (DOI). As citações no texto levam à referência.
+- *Referências*: tabela gerada automaticamente com Referência (APA), Achado principal e Link (DOI). O achado vem do campo `achados` do frontmatter (chave do `.bib` → frase curta); se faltar, a tabela mostra "—" e o build avisa. As citações no texto levam à linha da referência.
 - Cada guia tem "Em 1 minuto" (2 a 5 frases para o produtor) e um selo de evidência (`forte`, `moderada`, `limitada`, `posicionamento`).
 - Um guia pode ser publicado só com texto e referências e ganhar aula, calculadora e vídeo depois.
 
@@ -95,4 +95,4 @@ Produtores rurais no celular, com sinal fraco. Páginas leves, nada que dependa 
 
 ## Pendências
 
-A lista atualizada fica no fim do `README.md`. Próximo passo combinado: completar o modelo de guia (PDF de resumo, tabela de referências com "achado principal", blocos Exemplo real e Árvore de decisão). Feito: Caderno de Campo no fim da página.
+A lista atualizada fica no fim do `README.md`. Próximo passo combinado: completar o modelo de guia (PDF de resumo, blocos Exemplo real e Árvore de decisão). Feito: Caderno de Campo no fim da página, tabela de referências com achado principal.

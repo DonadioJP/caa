@@ -68,6 +68,7 @@ Campos principais do frontmatter (a lista completa está em `src/content.config.
 | `titulo`, `descricao` | Título e 1–2 frases de resumo |
 | `emUmMinuto` | 2 a 5 pontos essenciais, para o produtor |
 | `evidencia` | `forte`, `moderada`, `limitada` ou `posicionamento` |
+| `achados` | Achado principal de cada referência citada (chave do `.bib` → frase curta) |
 | `nivel` | `introdutorio`, `intermediario` ou `avancado` |
 | `tags` | Viram páginas `/tags/<tag>/` |
 | `video` | Status, formato e URL do PeerTube (independente da aula) |
@@ -90,7 +91,14 @@ No corpo, use os componentes sem importar nada:
 <Dica>Truque de campo.</Dica>
 ```
 
-Citações como no Quarto: `[@godden2008]`. As referências citadas aparecem automaticamente no fim da página.
+Citações como no Quarto: `[@godden2008]`. As referências citadas aparecem automaticamente no fim da página, numa tabela com três colunas: Referência (APA), Achado principal e Link (DOI ou URL). O achado vem do frontmatter:
+
+```yaml
+achados:
+  godden2008: "Frase curta com o achado principal."
+```
+
+Se faltar o achado de uma referência citada, a tabela mostra "—" e o `npm run build` avisa no terminal. No celular, cada referência vira um cartão.
 
 ### caderno.md — Caderno de Campo
 
@@ -184,6 +192,7 @@ O **painel de produção** em `/painel/` compara os guias planejados (em `taxono
 - [ ] Primeira calculadora (colostro)
 - [x] Repositório público e hospedagem aberta (GitHub Pages, publicação automática a cada push)
 - [x] Caderno de Campo no fim da página do guia (`caderno.md`)
+- [x] Tabela de referências com achado principal (`achados`)
 - [ ] Escolher a instância do PeerTube para o CAATube
 - [ ] Configurar exportação automática do Zotero para `bibliografia/biblioteca.bib`
 - [ ] Substituir o conteúdo de exemplo do guia de colostro

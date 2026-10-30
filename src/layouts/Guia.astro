@@ -16,6 +16,7 @@ import Quiz from '../components/guia/Quiz.astro';
 import Video from '../components/guia/Video.astro';
 import Calculadora from '../components/guia/Calculadora.astro';
 import Caderno from '../components/guia/Caderno.astro';
+import Referencias from '../components/guia/Referencias.astro';
 import { componentesDoGuia } from '../components/guia';
 import { secaoDoGuia, completudeDoGuia, rotulos, urlDaAula, slugTag, type Guia, url } from '../lib/conteudo';
 
@@ -64,11 +65,8 @@ const data = (dt: Date) => dt.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
   {calc && <Calculadora ferramenta={calc} />}
   {aula && <Quiz quiz={aula.data.quiz} />}
 
-  {remarkPluginFrontmatter.referenciasHtml && (
-    <section class="referencias">
-      <h2>Referências</h2>
-      <Fragment set:html={remarkPluginFrontmatter.referenciasHtml} />
-    </section>
+  {remarkPluginFrontmatter.referencias?.length > 0 && (
+    <Referencias guia={guia.id} referencias={remarkPluginFrontmatter.referencias} achados={d.achados} />
   )}
 
   <p class="datas">

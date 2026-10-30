@@ -1,0 +1,71 @@
+---
+/**
+ * TABELA DE REFERÊNCIAS — Referência (APA) · Achado principal · Link.
+ * As referências vêm do rehype-citation (só as citadas no texto); os achados,
+ * do campo `achados` do frontmatter do guia. Cada linha tem id="bib-<chave>",
+ * para onde as citações do texto apontam.
+ * No celular, cada linha vira um cartão empilhado.
+ */
+interface Referencia { chave: string; html: string; link?: string }
+interface Props { guia: string; referencias: Referencia[]; achados: Record<string, string> }
+const { guia, referencias, achados } = Astro.props;
+
+for (const r of referencias) {
+  if (!achados[r.chave]) console.warn(`[referências] ${guia}: falta o achado principal de "${r.chave}" (campo achados no guia.mdx)`);
+}
+
+/** Texto do link: o DOI sem o prefixo, ou o endereço sem o protocolo. */
+const rotuloDoLink = (link: string) => link.replace(/^https?:\/\/(dx\.)?(doi\.org\/)?/, '').replace(/\/$/, '');
+---
+<section class="referencias">
+  <h2>Referências</h2>
+  <table>
+    <thead>
+      <tr><th scope="col">Referência</th><th scope="col">Achado principal</th><th scope="col">Link</th></tr>
+    </thead>
+    <tbody>
+      {referencias.map((r) => (
+        <tr id={`bib-${r.chave}`}>
+          <td class="ref" set:html={r.html} />
+          <td data-rotulo="Achado principal">{achados[r.chave] ?? '—'}</td>
+          <td class="link" data-rotulo="Link">{r.link ? (
+            <a href={r.link} title={r.link}>
+              <span class="curto">{/doi\.org\//.test(r.link) ? 'DOI' : 'Acessar'}</span>
+              <span class="completo">{rotuloDoLink(r.link)}</span>
+            </a>
+          ) : '—'}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</section>
+
+<style>
+  table { font-size: var(--t-pequeno); line-height: 1.5; }
+  th, td { vertical-align: top; padding: .75rem .6rem; }
+  thead th { border-bottom: 2px solid var(--borda); color: var(--tinta-suave); font-weight: 700; }
+  .ref { width: 46%; }
+  .link { overflow-wrap: anywhere; }
+  .link a { display: inline-block; padding: .2rem 0; }
+  /* Desktop: só "DOI" (o endereço completo fica no title); celular: o DOI inteiro */
+  .completo { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  /* A linha para onde a citação levou fica destacada */
+  tr:target td { background: var(--ceu-tinta); }
+
+  /* Celular: cada referência vira um cartão */
+  @media (max-width: 40rem) {
+    table, tbody, tr, td { display: block; width: auto; }
+    thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    tr { padding: .9rem 0; border-bottom: 1px solid var(--borda); }
+    td { border: 0; padding: .2rem 0; }
+    .ref { width: auto; }
+    .curto { display: none; }
+    .completo { position: static; width: auto; height: auto; overflow: visible; clip: auto; }
+    td[data-rotulo]::before {
+      content: attr(data-rotulo); display: block; margin-top: .4rem;
+      font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .09em; color: var(--tinta-suave);
+    }
+    tr:target { background: var(--ceu-tinta); padding-inline: .75rem; border-radius: var(--raio); }
+    tr:target td { background: none; }
+  }
+</style>
