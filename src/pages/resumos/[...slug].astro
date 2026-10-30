@@ -1,0 +1,126 @@
+---
+/**
+ * RESUMO DE UMA PÁGINA (A4) de cada guia publicado.
+ * Esta página é a fonte do PDF: depois do `astro build`,
+ * scripts/gerar-resumos.mjs a abre no Chromium (Playwright) e salva
+ * /resumos/<guia>.pdf. Sempre no tema claro.
+ *
+ * Conteúdo: título → mensagem científica principal (resumo.mensagem ou a
+ * descricao) → pontos práticos (Em 1 minuto) → diagrama (resumo.diagrama,
+ * opcional) → link e QR code para o guia.
+ */
+import '@fontsource-variable/alegreya/wght.css';
+import '@fontsource/alegreya-sans/400.css';
+import '@fontsource/alegreya-sans/700.css';
+import '../../styles/global.css';
+import Simbolo from '../../components/marca/Simbolo.astro';
+import Evidencia from '../../components/guia/Evidencia.astro';
+import QRCode from '../../components/guia/QRCode.astro';
+import { guiasPublicos, secaoDoGuia, urlDoGuia, url } from '../../lib/conteudo';
+
+export async function getStaticPaths() {
+  return (await guiasPublicos()).map((guia) => ({ params: { slug: guia.id }, props: { guia } }));
+}
+
+const { guia } = Astro.props;
+const d = guia.data;
+const secao = secaoDoGuia(guia.id);
+const enderecoDoGuia = new URL(urlDoGuia(guia.id), Astro.site).href;
+const enderecoVisivel = enderecoDoGuia.replace(/^https?:\/\//, '').replace(/\/$/, '');
+---
+<!doctype html>
+<html lang="pt-BR" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>{d.titulo} · Resumo · Criação Animal Agroecológica</title>
+    <link rel="icon" href={url('favicon.svg')} type="image/svg+xml" />
+  </head>
+  <body data-pagefind-ignore="all">
+    <main class="folha">
+      <header class="topo">
+        <Simbolo tamanho="11mm" id="resumo" />
+        <div>
+          <p class="portal">Criação Animal Agroecológica</p>
+          {secao && <p class="secao">{[...secao.ancestrais.map((a) => a.nome), secao.nome].join(' › ')}</p>}
+        </div>
+        <p class="tipo">Resumo do guia</p>
+      </header>
+
+      <h1>{d.titulo}</h1>
+
+      <section class="ciencia">
+        <p class="rotulo">O que a ciência mostra</p>
+        <p class="mensagem">{d.resumo.mensagem ?? d.descricao}</p>
+        <Evidencia nivel={d.evidencia} />
+      </section>
+
+      <section class="pratica">
+        <p class="rotulo">Na prática</p>
+        <ul>{d.emUmMinuto.map((i) => <li>{i}</li>)}</ul>
+      </section>
+
+      {d.resumo.diagrama && (
+        <figure class="diagrama">
+          <img src={d.resumo.diagrama.src} alt={d.resumo.legenda ?? ''} />
+          {d.resumo.legenda && <figcaption>{d.resumo.legenda}</figcaption>}
+        </figure>
+      )}
+
+      <footer class="rodape">
+        <QRCode texto={enderecoDoGuia} tamanho="28mm" rotulo={`QR code para o guia ${d.titulo}`} />
+        <div>
+          <p class="chamada">Leia o guia completo, com as evidências e as referências:</p>
+          <p class="endereco"><a href={enderecoDoGuia}>{enderecoVisivel}</a></p>
+          <p class="licenca">Conteúdo aberto sob CC BY-SA 4.0: use, adapte e compartilhe citando a fonte.</p>
+        </div>
+      </footer>
+    </main>
+  </body>
+</html>
+
+<style>
+  @page { size: A4; margin: 0; }
+  :global(html), :global(body) { background: #fff; }
+  :global(body) { margin: 0; }
+
+  /* A folha tem o tamanho exato de um A4; o gerador recusa o que passar dela */
+  .folha {
+    box-sizing: border-box; width: 210mm; height: 297mm; overflow: hidden;
+    padding: 14mm 16mm 12mm; margin: 0 auto; background: #fff;
+    display: flex; flex-direction: column; gap: 6mm;
+    font-size: 11.5pt; line-height: 1.45;
+  }
+  @media screen { .folha { margin: 1.5rem auto; outline: 1px solid var(--borda); } }
+
+  .topo { display: flex; align-items: center; gap: 3mm; padding-bottom: 4mm; border-bottom: 1px solid var(--borda); }
+  .topo p { margin: 0; }
+  .portal { font-family: var(--fonte-titulo); font-weight: 700; font-size: 12pt; color: var(--pasto); }
+  .secao { font-size: 9pt; color: var(--tinta-suave); }
+  .tipo { margin-left: auto !important; font-size: 8.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: .09em; color: var(--tinta-suave); }
+
+  h1 { font-size: 30pt; margin: 0; line-height: 1.1; }
+
+  .rotulo { font-size: 8.5pt; }
+  .ciencia .rotulo { color: var(--ceu); }
+  .mensagem { font-family: var(--fonte-titulo); font-size: 14pt; line-height: 1.4; margin: 1.5mm 0 2.5mm; }
+
+  .pratica { background: var(--pasto-tinta); border-radius: var(--raio); padding: 5mm 6mm; }
+  .pratica .rotulo { color: var(--pasto); }
+  .pratica ul { margin: 2mm 0 0; padding: 0; list-style: none; display: grid; gap: 2mm; }
+  .pratica li { position: relative; padding-left: 5.5mm; }
+  .pratica li::before { content: ''; position: absolute; left: 0; top: .5em; width: 2.4mm; height: 2.4mm; border-radius: 50%; background: var(--pasto); }
+
+  /* O diagrama ocupa o espaço que sobrar entre os pontos práticos e o rodapé */
+  .diagrama { flex: 1 1 auto; min-height: 0; margin: 0; display: flex; flex-direction: column; align-items: center; gap: 2mm; }
+  .diagrama img { flex: 1 1 auto; min-height: 0; max-width: 100%; object-fit: contain; }
+  figcaption { font-size: 9pt; color: var(--tinta-suave); text-align: center; }
+
+  .rodape { margin-top: auto; display: flex; gap: 5mm; align-items: center; padding-top: 4mm; border-top: 1px solid var(--borda); }
+  .rodape p { margin: 0; }
+  .chamada { font-size: 10pt; }
+  .endereco { font-weight: 700; font-size: 11pt; overflow-wrap: anywhere; }
+  .endereco a { color: var(--ceu); text-decoration: none; }
+  .licenca { margin-top: 2mm !important; font-size: 8pt; color: var(--tinta-suave); }
+</style>

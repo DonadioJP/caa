@@ -1,0 +1,28 @@
+---
+/**
+ * QR code em SVG, gerado no build (sem JavaScript na página).
+ * Usa qrcode-generator (MIT) só para calcular os módulos; o desenho é um
+ * único <path>, na cor do texto.
+ */
+import qrcode from 'qrcode-generator';
+
+interface Props { texto: string; tamanho?: string; rotulo?: string }
+const { texto, tamanho = '3cm', rotulo = 'QR code' } = Astro.props;
+
+const qr = qrcode(0, 'M');
+qr.addData(texto);
+qr.make();
+const n = qr.getModuleCount();
+const margem = 2;
+let d = '';
+for (let l = 0; l < n; l++) {
+  for (let c = 0; c < n; c++) {
+    if (qr.isDark(l, c)) d += `M${c + margem} ${l + margem}h1v1h-1z`;
+  }
+}
+const lado = n + margem * 2;
+---
+<svg viewBox={`0 0 ${lado} ${lado}`} width={tamanho} height={tamanho} role="img" aria-label={rotulo} shape-rendering="crispEdges">
+  <rect width={lado} height={lado} fill="#fff" />
+  <path d={d} fill="#1B2318" />
+</svg>

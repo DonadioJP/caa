@@ -31,7 +31,7 @@ const BASE_GUIAS = './src/content/guias';
 /* ------------------------------------------------------------------ */
 const guias = defineCollection({
   loader: glob({ pattern: '**/guia.mdx', base: BASE_GUIAS, generateId: idDaPasta }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     titulo: z.string(),
     /** 1–2 frases. Aparece no cabeçalho, nos cards e no Google. */
     descricao: z.string().max(240),
@@ -57,6 +57,22 @@ const guias = defineCollection({
      *     godden2008: "Frase curta com o achado principal."
      */
     achados: z.record(z.string(), z.string()).default({}),
+
+    /**
+     * Resumo em PDF de uma página (gerado no build para todo guia publicado).
+     * Os pontos práticos vêm do "Em 1 minuto". Tudo aqui é opcional:
+     *   resumo:
+     *     mensagem: "A mensagem científica principal, em 1 a 3 frases."  (sem ela, usa a descricao)
+     *     diagrama: ./imagens/figura.svg   (figura central; SVG fica mais leve)
+     *     legenda: "O que a figura mostra."
+     */
+    resumo: z
+      .object({
+        mensagem: z.string().max(400).optional(),
+        diagrama: image().optional(),
+        legenda: z.string().optional(),
+      })
+      .default({}),
 
     /**
      * Vídeo — independente dos slides.

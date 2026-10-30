@@ -38,6 +38,7 @@ Todo o fluxo, da escrita à publicação, usa software livre:
 |---|---|---|
 | Site | Astro, MDX, Pagefind (busca) | MIT |
 | Aulas | Reveal.js | MIT |
+| Resumos em PDF | Playwright + Chromium; qrcode-generator (QR code) | Apache-2.0 + BSD-3-Clause; MIT |
 | Citações | Zotero + Better BibTeX; citeproc-js | AGPL-3.0; MIT; CPAL/AGPL |
 | Calculadoras | R, Shiny, Shinylive (roda no navegador, sem servidor) | GPL; GPL-3; MIT |
 | Editor | VSCodium | MIT |

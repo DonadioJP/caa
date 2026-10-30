@@ -14,9 +14,10 @@ Portal educativo, aberto e em português do Brasil sobre produção animal em ba
 
 ```bash
 npm install        # uma vez, e sempre que package.json mudar
+npx playwright install chromium   # uma vez: navegador dos PDFs e dos PNGs da marca
 npm run dev        # site local em http://localhost:4321, mostra rascunhos
 npm run check      # erros de tipo e de esquema: rode antes de cada commit
-npm run build      # site final em dist/ + índice de busca (Pagefind)
+npm run build      # site final em dist/ + resumos em PDF + índice de busca (Pagefind)
 npm run preview    # abre o site final; a busca só funciona aqui
 node marca/gerar-marca.mjs   # regenera os SVGs da marca em public/marca/
 node marca/gerar-png.cjs     # regenera os PNGs da marca (usa Playwright)
@@ -54,7 +55,7 @@ Ordem: cabeçalho (título, tags) → botões "Iniciar aula" e "Resumo em PDF" �
 
 **Vídeo**: não é a gravação dos slides. O roteiro (`roteiro.md`) diz, por bloco, o que se fala e o que aparece na tela (campo, demonstração, entrevista).
 
-**Resumo em PDF** (a fazer): título, mensagem científica principal, pontos práticos, um diagrama, link para o guia.
+**Resumo em PDF**: A4, uma página, tema claro, gerado no build para todo guia publicado: título, mensagem científica principal (`resumo.mensagem`, ou a `descricao`), pontos práticos (o "Em 1 minuto"), diagrama opcional (`resumo.diagrama`, `resumo.legenda`), link e QR code do guia. Página-fonte em `src/pages/resumos/[...slug].astro`; `scripts/gerar-resumos.mjs` faz o PDF com Playwright e para o build se passar de uma página ou de 600 KB.
 
 ## Escrita
 
@@ -95,4 +96,4 @@ Produtores rurais no celular, com sinal fraco. Páginas leves, nada que dependa 
 
 ## Pendências
 
-A lista atualizada fica no fim do `README.md`. Próximo passo combinado: completar o modelo de guia (PDF de resumo). Feito: Caderno de Campo no fim da página, tabela de referências com achado principal, Exemplo real, Árvore de decisão.
+A lista atualizada fica no fim do `README.md`. O modelo de guia está completo (Caderno de Campo no fim da página, tabela de referências com achado principal, Exemplo real, Árvore de decisão, Resumo em PDF).

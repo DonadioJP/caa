@@ -9,8 +9,9 @@ Feito com [Astro](https://astro.build): o conteúdo é escrito em Markdown/MDX, 
 
 ```bash
 npm install
+npx playwright install chromium   # uma vez: o navegador que gera os PDFs
 npm run dev        # site local em http://localhost:4321, mostra rascunhos
-npm run build      # gera o site final em dist/ + índice de busca
+npm run build      # gera o site final em dist/ + resumos em PDF + índice de busca
 npm run preview    # abre o site final (a busca só funciona aqui)
 npm run check      # confere erros de tipo e de esquema
 ```
@@ -69,6 +70,7 @@ Campos principais do frontmatter (a lista completa está em `src/content.config.
 | `emUmMinuto` | 2 a 5 pontos essenciais, para o produtor |
 | `evidencia` | `forte`, `moderada`, `limitada` ou `posicionamento` |
 | `achados` | Achado principal de cada referência citada (chave do `.bib` → frase curta) |
+| `resumo` | Para o PDF de uma página: `mensagem`, `diagrama` e `legenda` (todos opcionais) |
 | `nivel` | `introdutorio`, `intermediario` ou `avancado` |
 | `tags` | Viram páginas `/tags/<tag>/` |
 | `video` | Status, formato e URL do PeerTube (independente da aula) |
@@ -131,6 +133,19 @@ achados:
 ```
 
 Se faltar o achado de uma referência citada, a tabela mostra "—" e o `npm run build` avisa no terminal. No celular, cada referência vira um cartão.
+
+### Resumo em PDF
+
+Todo guia publicado ganha um PDF A4 de uma página, gerado no `npm run build`, no tema claro: título, mensagem científica principal, pontos práticos (o "Em 1 minuto"), um diagrama opcional, o link do guia e um QR code para ele. O botão "Resumo em PDF" fica ao lado de "Iniciar aula".
+
+```yaml
+resumo:
+  mensagem: "A mensagem científica principal, em 1 a 3 frases."   # sem ela, usa a descricao
+  diagrama: ./imagens/figura.svg                                  # opcional; SVG fica mais leve
+  legenda: "O que a figura mostra."
+```
+
+Como funciona: a página `/resumos/<guia>/` tem o tamanho exato de um A4; depois do `astro build`, `scripts/gerar-resumos.mjs` a abre no Chromium (Playwright) e salva `/resumos/<guia>.pdf`. O build **para com erro** se um resumo passar de uma página ou de 600 KB, para o arquivo continuar leve para o WhatsApp. No `npm run dev` não há PDF: o botão abre a página do resumo, que mostra como o PDF vai ficar.
 
 ### caderno.md — Caderno de Campo
 
@@ -219,13 +234,14 @@ O **painel de produção** em `/painel/` compara os guias planejados (em `taxono
 
 ## Pendências
 
-- [ ] Template do resumo em PDF
 - [ ] Primeira calculadora (colostro)
 - [x] Repositório público e hospedagem aberta (GitHub Pages, publicação automática a cada push)
 - [x] Caderno de Campo no fim da página do guia (`caderno.md`)
 - [x] Tabela de referências com achado principal (`achados`)
 - [x] Componente Exemplo real (vídeo, entrevista, estudo de caso)
 - [x] Componente de árvore de decisão
+- [x] Resumo em PDF de uma página para cada guia
+- [ ] Diagrama do resumo do colostro na identidade visual (hoje é uma figura provisória)
 - [ ] Escolher a instância do PeerTube para o CAATube
 - [ ] Configurar exportação automática do Zotero para `bibliografia/biblioteca.bib`
 - [ ] Substituir o conteúdo de exemplo do guia de colostro

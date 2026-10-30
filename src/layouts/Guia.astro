@@ -30,6 +30,10 @@ const calc = d.calculadora ? await getEntry(d.calculadora) : undefined;
 const c = await completudeDoGuia(guia);
 const secao = secaoDoGuia(guia.id);
 const migalhas = secao ? [...secao.ancestrais, { nome: secao.nome, caminho: secao.caminho }] : [];
+// O PDF é gerado depois do build (scripts/gerar-resumos.mjs), que falha se algum
+// resumo não sair; então, no site publicado, o PDF sempre existe. No `npm run dev`
+// não há PDF: o botão abre a página que vira o PDF.
+const urlDoResumo = import.meta.env.DEV ? url(`resumos/${guia.id}/`) : url(`resumos/${guia.id}.pdf`);
 const data = (dt: Date) => dt.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
 ---
 <Base titulo={d.titulo} descricao={d.descricao}>
@@ -46,12 +50,11 @@ const data = (dt: Date) => dt.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
     </div>
     <Completude c={c} />
     <ul class="tags">{d.tags.map((t) => <li><a href={url(`tags/${slugTag(t)}/`)}>#{t}</a></li>)}</ul>
-    {aula && (
-      <div class="acoes">
-        <a class="botao" href={urlDaAula(guia.id)}>▶ Iniciar aula</a>
-        {aula.data.duracaoMin && <span class="duracao">{aula.data.duracaoMin} min</span>}
-      </div>
-    )}
+    <div class="acoes">
+      {aula && <a class="botao" href={urlDaAula(guia.id)}>▶ Iniciar aula</a>}
+      {aula?.data.duracaoMin && <span class="duracao">{aula.data.duracaoMin} min</span>}
+      <a class="botao secundario" href={urlDoResumo}>Resumo em PDF</a>
+    </div>
   </header>
 
   <EmUmMinuto itens={d.emUmMinuto} />
@@ -86,7 +89,7 @@ const data = (dt: Date) => dt.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
   .nivel { font-size: var(--t-pequeno); color: var(--tinta-suave); }
   .nivel::before { content: '◆ '; color: var(--ilu-colina); }
   header { padding-bottom: .25rem; }
-  .acoes { margin: 1rem 0; display: flex; gap: .75rem; align-items: center; }
+  .acoes { margin: 1rem 0; display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; }
   .duracao { color: var(--tinta-suave); font-size: .9rem; }
   .datas { color: var(--tinta-suave); font-size: .85rem; margin-top: 2rem; }
 </style>
