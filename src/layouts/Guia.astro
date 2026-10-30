@@ -3,8 +3,9 @@
  * TEMPLATE DO GUIA
  * Ordem na página:
  *   migalhas → título, descrição, selos, tags → [Iniciar aula] → Em 1 minuto
- *   → vídeo (se publicado) → texto do guia (Ciência, Práticas, Caderno)
+ *   → vídeo (se publicado) → texto do guia (Ciência, Práticas, Exemplo real)
  *   → calculadora → teste de conhecimento → referências → datas
+ *   → Caderno de Campo (caderno.md, se existir: sempre o último bloco)
  */
 import { getEntry, render } from 'astro:content';
 import Base from './Base.astro';
@@ -14,6 +15,7 @@ import Evidencia from '../components/guia/Evidencia.astro';
 import Quiz from '../components/guia/Quiz.astro';
 import Video from '../components/guia/Video.astro';
 import Calculadora from '../components/guia/Calculadora.astro';
+import Caderno from '../components/guia/Caderno.astro';
 import { componentesDoGuia } from '../components/guia';
 import { secaoDoGuia, completudeDoGuia, rotulos, urlDaAula, slugTag, type Guia, url } from '../lib/conteudo';
 
@@ -21,6 +23,8 @@ const { guia } = Astro.props as { guia: Guia };
 const d = guia.data;
 const { Content, remarkPluginFrontmatter } = await render(guia);
 const aula = await getEntry('aulas', guia.id);
+const caderno = await getEntry('cadernosDosGuias', guia.id);
+const Notas = caderno ? (await render(caderno)).Content : undefined;
 const calc = d.calculadora ? await getEntry(d.calculadora) : undefined;
 const c = await completudeDoGuia(guia);
 const secao = secaoDoGuia(guia.id);
@@ -70,6 +74,8 @@ const data = (dt: Date) => dt.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
   <p class="datas">
     Publicado em {data(d.publicado)}{d.revisado && ` · revisado em ${data(d.revisado)}`}
   </p>
+
+  {Notas && <Caderno><Notas /></Caderno>}
 </Base>
 
 <style>

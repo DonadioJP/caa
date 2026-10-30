@@ -50,6 +50,7 @@ src/content/guias/producao/bovinocultura-leite/bezerras/colostro/
 ├── guia.mdx       → a página do guia                      (obrigatório)
 ├── aula.md        → os slides da aula                     (opcional)
 ├── roteiro.md     → roteiro do vídeo, não é publicado     (opcional)
+├── caderno.md     → Caderno de Campo, no fim da página    (opcional)
 └── imagens/       → figuras usadas no guia e na aula
 ```
 
@@ -87,11 +88,14 @@ No corpo, use os componentes sem importar nada:
 </Checklist>
 
 <Dica>Truque de campo.</Dica>
-
-<Caderno>Reflexão em primeira pessoa.</Caderno>
 ```
 
 Citações como no Quarto: `[@godden2008]`. As referências citadas aparecem automaticamente no fim da página.
+
+### caderno.md — Caderno de Campo
+
+Texto em primeira pessoa e em tom narrativo: uma história de campo, um bastidor, uma conversa com um produtor. Não precisa de frontmatter. Aparece sempre como o último bloco da página, depois das Referências, com o visual de caderno pautado.
+
 
 ### aula.md — slides
 
@@ -178,7 +182,8 @@ O **painel de produção** em `/painel/` compara os guias planejados (em `taxono
 - [ ] Template do resumo em PDF
 - [ ] Componente de árvore de decisão
 - [ ] Primeira calculadora (colostro)
-- [ ] Repositório público e hospedagem aberta (Codeberg + Codeberg Pages, ou GitHub Pages)
+- [x] Repositório público e hospedagem aberta (GitHub Pages, publicação automática a cada push)
+- [x] Caderno de Campo no fim da página do guia (`caderno.md`)
 - [ ] Escolher a instância do PeerTube para o CAATube
 - [ ] Configurar exportação automática do Zotero para `bibliografia/biblioteca.bib`
 - [ ] Substituir o conteúdo de exemplo do guia de colostro

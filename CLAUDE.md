@@ -30,18 +30,18 @@ Astro (site estático) + MDX, Reveal.js (aulas), rehype-citation (citações a p
 
 ## Estrutura e convenções
 
-- **Um guia = uma pasta.** `src/content/guias/<seção>/<subseção>/<slug>/` contém `guia.mdx` (obrigatório), `aula.md` (slides), `roteiro.md` (roteiro do vídeo, não publicado) e `imagens/`. O caminho da pasta é o endereço do guia e define a seção; não repita isso no frontmatter.
+- **Um guia = uma pasta.** `src/content/guias/<seção>/<subseção>/<slug>/` contém `guia.mdx` (obrigatório), `aula.md` (slides), `roteiro.md` (roteiro do vídeo, não publicado), `caderno.md` (Caderno de Campo, opcional) e `imagens/`. O caminho da pasta é o endereço do guia e define a seção; não repita isso no frontmatter.
 - **Esquema** de todo o conteúdo: `src/content.config.ts`. Mudou um campo? Atualize o esquema, os guias existentes e o README.
 - **Taxonomia**: `src/data/taxonomia.ts` define seções, guias planejados (`planejados`) e materiais (`materiais`: ferramentas, Open Machines, apresentações, histórias). O slug planejado deve ser igual ao nome da pasta do guia.
 - **Mapa da página inicial**: destinos em `src/data/mapa.ts`, desenho em `src/components/marca/MapaPropriedade.astro`.
 - **Calculadoras**: `src/data/ferramentas.yaml`; código R em `ferramentas-shiny/<id>/app.R`, exportado com shinylive para `public/ferramentas/<id>/`.
-- **Componentes do guia** (usáveis no MDX sem importar): `Protocolo`, `Checklist`, `Dica`, `Caderno`, `Aviso`. Ficam em `src/components/guia/` e são registrados em `src/components/guia/index.ts`.
+- **Componentes do guia** (usáveis no MDX sem importar): `Protocolo`, `Checklist`, `Dica`, `Aviso`. Ficam em `src/components/guia/` e são registrados em `src/components/guia/index.ts`.
 - **Painel de produção** em `/painel/`: compara o planejado com o publicado.
 - Rascunhos (`rascunho: true`) aparecem só no `npm run dev`.
 
 ## Modelo de guia (definido pelo JP)
 
-Ordem: cabeçalho (título, tags) → botões "Iniciar aula" e "Resumo em PDF" → **A ciência por trás** → **Práticas no campo** → **Exemplo real** → **Calculadora** → **Referências** → **Caderno de Campo** (opcional).
+Ordem: cabeçalho (título, tags) → botões "Iniciar aula" e "Resumo em PDF" → **A ciência por trás** → **Práticas no campo** → **Exemplo real** → **Calculadora** → **Referências** → **Caderno de Campo** (opcional, em `caderno.md`; o layout o põe sempre no fim da página).
 
 - *A ciência por trás*, com subestrutura fixa: Contexto e importância; Mecanismos; Resumo das evidências; Controvérsias, lacunas e limitações; Direções futuras.
 - *Práticas no campo*: protocolos numerados, métodos e equipamentos, checklists, árvores de decisão, dicas, links para guias relacionados.
@@ -95,4 +95,4 @@ Produtores rurais no celular, com sinal fraco. Páginas leves, nada que dependa 
 
 ## Pendências
 
-A lista atualizada fica no fim do `README.md`. Próximo passo combinado: completar o modelo de guia (PDF de resumo, tabela de referências com "achado principal", blocos Exemplo real e Árvore de decisão, Caderno de Campo no fim da página).
+A lista atualizada fica no fim do `README.md`. Próximo passo combinado: completar o modelo de guia (PDF de resumo, tabela de referências com "achado principal", blocos Exemplo real e Árvore de decisão). Feito: Caderno de Campo no fim da página.

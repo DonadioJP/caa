@@ -9,11 +9,12 @@
  *     ├── guia.mdx      → página do guia          (obrigatório)
  *     ├── aula.md       → slides da aula          (opcional)
  *     ├── roteiro.md    → roteiro do vídeo        (opcional, não publicado)
+ *     ├── caderno.md    → Caderno de Campo, no fim da página (opcional)
  *     └── imagens/      → figuras do guia e da aula
  *
- * As três coleções abaixo (guias, aulas, roteiros) compartilham o mesmo id
- * (o caminho da pasta), então a página do guia encontra a aula e o roteiro
- * automaticamente.
+ * As coleções guias, aulas, roteiros e cadernosDosGuias compartilham o mesmo id
+ * (o caminho da pasta), então a página do guia encontra a aula, o roteiro
+ * e o caderno automaticamente.
  */
 import { defineCollection, reference } from 'astro:content';
 import { glob, file } from 'astro/loaders';
@@ -21,7 +22,7 @@ import { z } from 'astro/zod';
 
 // id = caminho da pasta, sem o nome do arquivo
 const idDaPasta = ({ entry }: { entry: string }) =>
-  entry.replace(/\/(guia|aula|roteiro|build)\.mdx?$/, '');
+  entry.replace(/\/(guia|aula|roteiro|caderno|build)\.mdx?$/, '');
 
 const BASE_GUIAS = './src/content/guias';
 
@@ -125,6 +126,18 @@ const roteiros = defineCollection({
 });
 
 /* ------------------------------------------------------------------ */
+/* CADERNO DE CAMPO DO GUIA (caderno.md na pasta do guia)              */
+/* ------------------------------------------------------------------ */
+/*
+ * Texto em primeira pessoa, em tom narrativo. O layout o mostra sempre como
+ * o último bloco da página, depois das Referências. Não precisa de frontmatter.
+ */
+const cadernosDosGuias = defineCollection({
+  loader: glob({ pattern: '**/caderno.md', base: BASE_GUIAS, generateId: idDaPasta }),
+  schema: z.object({}),
+});
+
+/* ------------------------------------------------------------------ */
 /* CADERNO DE CAMPO (entradas avulsas)                                 */
 /* ------------------------------------------------------------------ */
 const caderno = defineCollection({
@@ -173,4 +186,4 @@ const ferramentas = defineCollection({
   }),
 });
 
-export const collections = { guias, aulas, roteiros, caderno, builds, ferramentas };
+export const collections = { guias, aulas, roteiros, cadernosDosGuias, caderno, builds, ferramentas };
