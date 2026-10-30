@@ -1,7 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-// TODO: trocar pelo endereço definitivo do repositório
-const repositorio = 'https://codeberg.org/';
+const repositorio = 'https://github.com/DonadioJP/caa';
 ---
 <Base titulo="Sobre">
   <h1>Sobre o portal</h1>
@@ -24,7 +23,7 @@ const repositorio = 'https://codeberg.org/';
   <p><a class="botao secundario" href={repositorio}>Ver o código-fonte</a></p>
 
   <h2>Como contribuir</h2>
-  <p>Encontrou um erro, conhece um estudo importante ou tem uma experiência de campo para contar? Contribuições são bem-vindas pelo repositório do projeto.</p>
+  <p>Encontrou um erro, conhece um estudo importante ou tem uma experiência de campo para contar? Contribuições são bem-vindas pelo <a href={repositorio}>repositório do projeto</a>.</p>
 </Base>
 <style>
   .descricao { font-size: 1.3rem; line-height: 1.45; color: var(--tinta-suave); }

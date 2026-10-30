@@ -10,8 +10,8 @@ const raiz = fileURLToPath(new URL('.', import.meta.url));
 
 export default defineConfig({
   // Endereço e prefixo vêm do ambiente na publicação (.github/workflows/publicar.yml).
-  // Localmente o site fica na raiz. TODO: trocar pelo domínio definitivo.
-  site: process.env.CAA_SITE ?? 'https://criacaoanimalagroecologica.example',
+  // Localmente o site fica na raiz.
+  site: process.env.CAA_SITE ?? 'https://donadiojp.github.io',
   base: process.env.CAA_BASE ?? '/',
   trailingSlash: 'always',
   integrations: [mdx()],
