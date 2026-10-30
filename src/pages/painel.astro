@@ -6,7 +6,7 @@
  */
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import { nosDaTaxonomia } from '../lib/conteudo';
+import { nosDaTaxonomia, url } from '../lib/conteudo';
 
 const guias = await getCollection('guias'); // inclui rascunhos
 const aulas = new Set((await getCollection('aulas')).map((a) => a.id));
@@ -62,7 +62,7 @@ const marca = (v: unknown) => (v ? '●' : '·');
           <tbody>
             {s.linhas.map((l) => (
               <tr class:list={{ vazio: !l.texto }}>
-                <td>{l.texto === 'publicado' ? <a href={`/${l.id}/`}>{l.titulo}</a> : l.titulo}</td>
+                <td>{l.texto === 'publicado' ? <a href={url(`${l.id}/`)}>{l.titulo}</a> : l.titulo}</td>
                 <td>{l.texto ?? '—'}</td>
                 <td>{marca(l.aula)}</td>
                 <td>{l.roteiro ?? '—'}</td>

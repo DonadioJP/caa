@@ -6,7 +6,7 @@
  */
 import Base from '../layouts/Base.astro';
 import Guia from '../layouts/Guia.astro';
-import { guiasPublicos, nosDaTaxonomia, urlDoGuia } from '../lib/conteudo';
+import { guiasPublicos, nosDaTaxonomia, urlDoGuia, url } from '../lib/conteudo';
 
 export async function getStaticPaths() {
   const guias = await guiasPublicos();
@@ -34,7 +34,7 @@ const emPreparo = (no?.planejados ?? []).filter(([slug]) => !publicadosAqui.has(
 {no && (
   <Base titulo={no.nome} descricao={no.descricao}>
     <nav class="migalhas" aria-label="Você está em">
-      {no.ancestrais.map((m) => <a href={`/${m.caminho}/`}>{m.nome}</a>)}
+      {no.ancestrais.map((m) => <a href={url(`${m.caminho}/`)}>{m.nome}</a>)}
     </nav>
     <h1>{no.nome}</h1>
     {no.descricao && <p class="descricao">{no.descricao}</p>}
@@ -44,7 +44,7 @@ const emPreparo = (no?.planejados ?? []).filter(([slug]) => !publicadosAqui.has(
       <ul class="cartoes">
         {filhos.map((f) => (
           <li>
-            <a class="cartao" href={`/${no.caminho}/${f.slug}/`}>
+            <a class="cartao" href={url(`${no.caminho}/${f.slug}/`)}>
               <strong>{f.nome}</strong>
               {f.descricao && <span>{f.descricao}</span>}
             </a>

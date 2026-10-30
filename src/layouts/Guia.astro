@@ -15,7 +15,7 @@ import Quiz from '../components/guia/Quiz.astro';
 import Video from '../components/guia/Video.astro';
 import Calculadora from '../components/guia/Calculadora.astro';
 import { componentesDoGuia } from '../components/guia';
-import { secaoDoGuia, completudeDoGuia, rotulos, urlDaAula, slugTag, type Guia } from '../lib/conteudo';
+import { secaoDoGuia, completudeDoGuia, rotulos, urlDaAula, slugTag, type Guia, url } from '../lib/conteudo';
 
 const { guia } = Astro.props as { guia: Guia };
 const d = guia.data;
@@ -29,7 +29,7 @@ const data = (dt: Date) => dt.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
 ---
 <Base titulo={d.titulo} descricao={d.descricao}>
   <nav class="migalhas" aria-label="Você está em">
-    {migalhas.map((m) => <a href={`/${m.caminho}/`}>{m.nome}</a>)}
+    {migalhas.map((m) => <a href={url(`${m.caminho}/`)}>{m.nome}</a>)}
   </nav>
 
   <header>
@@ -40,7 +40,7 @@ const data = (dt: Date) => dt.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
       <span class="nivel">{rotulos.nivel[d.nivel]}</span>
     </div>
     <Completude c={c} />
-    <ul class="tags">{d.tags.map((t) => <li><a href={`/tags/${slugTag(t)}/`}>#{t}</a></li>)}</ul>
+    <ul class="tags">{d.tags.map((t) => <li><a href={url(`tags/${slugTag(t)}/`)}>#{t}</a></li>)}</ul>
     {aula && (
       <div class="acoes">
         <a class="botao" href={urlDaAula(guia.id)}>▶ Iniciar aula</a>

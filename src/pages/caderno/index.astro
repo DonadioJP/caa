@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import { url } from '../../lib/conteudo';
 const entradas = (await getCollection('caderno', (e) => import.meta.env.DEV || !e.data.rascunho))
   .sort((a, b) => +b.data.data - +a.data.data);
 ---
@@ -9,7 +10,7 @@ const entradas = (await getCollection('caderno', (e) => import.meta.env.DEV || !
   <p>Reflexões, bastidores, entrevistas e histórias de campo.</p>
   {entradas.length === 0 ? <p>As primeiras entradas estão a caminho.</p> : (
     <ul class="cartoes">
-      {entradas.map((e) => <li><a class="cartao" href={`/caderno/${e.id}/`}><strong>{e.data.titulo}</strong><span>{e.data.resumo}</span></a></li>)}
+      {entradas.map((e) => <li><a class="cartao" href={url(`caderno/${e.id}/`)}><strong>{e.data.titulo}</strong><span>{e.data.resumo}</span></a></li>)}
     </ul>
   )}
 </Base>

@@ -77,7 +77,11 @@ export const rotulos = {
   },
 } as const;
 
-export const urlDoGuia = (id: string) => `/${id}/`;
-export const urlDaAula = (id: string) => `/aulas/${id}/`;
+/** Endereço interno com o prefixo do site (base), ex.: url('busca/') → '/caa/busca/' no GitHub Pages. */
+export const url = (caminho: string) =>
+  import.meta.env.BASE_URL.replace(/\/$/, '') + '/' + caminho.replace(/^\//, '');
+
+export const urlDoGuia = (id: string) => url(`${id}/`);
+export const urlDaAula = (id: string) => url(`aulas/${id}/`);
 export const slugTag = (t: string) =>
   t.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, '-');

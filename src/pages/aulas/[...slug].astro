@@ -18,7 +18,7 @@ import '@fontsource/alegreya-sans/700.css';
 import 'reveal.js/reveal.css';
 import 'reveal.js/theme/white.css';
 import '../../styles/aula.css';
-import { secaoDoGuia, urlDoGuia } from '../../lib/conteudo';
+import { secaoDoGuia, urlDoGuia, url } from '../../lib/conteudo';
 import Simbolo from '../../components/marca/Simbolo.astro';
 
 export async function getStaticPaths() {
@@ -52,7 +52,7 @@ const miolo = resto.join('\n\n---\n\n');
 const letras = 'ABCDE';
 // Paisagem como fundo de tela inteira na capa e no encerramento
 const fundoPaisagem = {
-  'data-background-image': '/marca/paisagem.svg',
+  'data-background-image': url('marca/paisagem.svg'),
   'data-background-size': '100% auto',
   'data-background-position': 'bottom',
   'data-background-repeat': 'no-repeat',
@@ -66,7 +66,7 @@ const fundoPaisagem = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Aula: {g.titulo} · Criação Animal Agroecológica</title>
     <meta name="robots" content="noindex" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href={url('favicon.svg')} type="image/svg+xml" />
   </head>
   <body>
     <a class="voltar" href={urlDoGuia(guia.id)}>← Guia</a>

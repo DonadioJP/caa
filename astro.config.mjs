@@ -9,8 +9,10 @@ import rehypeExtrairReferencias from './src/lib/rehype-extrair-referencias.mjs';
 const raiz = fileURLToPath(new URL('.', import.meta.url));
 
 export default defineConfig({
-  // TODO: trocar pelo domínio definitivo
-  site: 'https://criacaoanimalagroecologica.example',
+  // Endereço e prefixo vêm do ambiente na publicação (.github/workflows/publicar.yml).
+  // Localmente o site fica na raiz. TODO: trocar pelo domínio definitivo.
+  site: process.env.CAA_SITE ?? 'https://criacaoanimalagroecologica.example',
+  base: process.env.CAA_BASE ?? '/',
   trailingSlash: 'always',
   integrations: [mdx()],
   markdown: {

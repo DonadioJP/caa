@@ -1,11 +1,12 @@
 ---
 import Base from '../layouts/Base.astro';
+import { url } from '../lib/conteudo';
 ---
 <Base titulo="Buscar" semIndice>
   <h1>Buscar</h1>
   <div id="busca"></div>
-  <link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
-  <script is:inline src="/pagefind/pagefind-ui.js"></script>
+  <link href={url('pagefind/pagefind-ui.css')} rel="stylesheet" />
+  <script is:inline src={url('pagefind/pagefind-ui.js')}></script>
   <script is:inline>
     window.addEventListener('DOMContentLoaded', () => {
       if (window.PagefindUI) new PagefindUI({ element: '#busca', showSubResults: true, translations: { placeholder: 'Buscar nos guias…' } });

@@ -11,7 +11,7 @@
  */
 import { VACA } from '../../../marca/paisagem.mjs';
 import { pontosDoMapa } from '../../data/mapa';
-import { nosDaTaxonomia, guiasPublicos } from '../../lib/conteudo';
+import { nosDaTaxonomia, guiasPublicos, url } from '../../lib/conteudo';
 import type { No } from '../../data/taxonomia';
 
 const nos = nosDaTaxonomia();
@@ -26,7 +26,7 @@ const pontos = Object.fromEntries(
     const publicados = guias.filter((g) => g.id.startsWith(p.caminho + '/')).length;
     return [p.id, {
       ...p,
-      href: `/${p.caminho}/`,
+      href: url(`${p.caminho}/`),
       nome: no.nome,
       descricao: no.descricao ?? '',
       planejados: contarPlanejados(no),
@@ -251,7 +251,7 @@ const ordem = pontosDoMapa.map((p) => p.id);
         <p class="rotulo" data-campo="contagem"></p>
         <h2 data-campo="nome"></h2>
         <p data-campo="desc"></p>
-        <a class="botao" data-campo="abrir" href="/">Abrir seção →</a>
+        <a class="botao" data-campo="abrir" href={url('')}>Abrir seção →</a>
       </div>
     </div>
 

@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { url } from '../../lib/conteudo';
 const { ferramenta } = Astro.props as { ferramenta: CollectionEntry<'ferramentas'> };
 const { nome, descricao, tipo, src, status } = ferramenta.data;
 ---
@@ -8,7 +9,7 @@ const { nome, descricao, tipo, src, status } = ferramenta.data;
   <h2>{nome}</h2>
   <p>{descricao}</p>
   {status !== 'pronta' && <p class="breve">Em desenvolvimento</p>}
-  {status === 'pronta' && tipo === 'shinylive' && <iframe src={src} title={nome} loading="lazy"></iframe>}
+  {status === 'pronta' && tipo === 'shinylive' && <iframe src={src && url(src)} title={nome} loading="lazy"></iframe>}
   {status === 'pronta' && tipo === 'externo' && <a class="botao" href={src}>Abrir calculadora</a>}
   {/* tipo js: importe o componente da calculadora aqui quando existir */}
 </section>
