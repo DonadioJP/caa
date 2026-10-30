@@ -1,0 +1,29 @@
+---
+/**
+ * Um nó da árvore de decisão (uso interno de ArvoreDeDecisao.astro).
+ * Pergunta → dois <details> (Sim / Não) com o próximo nó dentro.
+ * Os dois <details> têm o mesmo `name`: abrir um fecha o outro,
+ * sem JavaScript.
+ */
+export type NoDaArvore =
+  | { pergunta: string; sim: NoDaArvore; nao: NoDaArvore }
+  | { acao: string };
+
+interface Props { no: NoDaArvore; grupo: string }
+const { no, grupo } = Astro.props;
+---
+{'acao' in no ? (
+  <p class="acao"><span class="rotulo">Ação recomendada</span>{no.acao}</p>
+) : (
+  <div class="no">
+    <p class="pergunta">{no.pergunta}</p>
+    <details name={grupo}>
+      <summary>Sim</summary>
+      <Astro.self no={no.sim} grupo={`${grupo}-s`} />
+    </details>
+    <details name={grupo}>
+      <summary>Não</summary>
+      <Astro.self no={no.nao} grupo={`${grupo}-n`} />
+    </details>
+  </div>
+)}

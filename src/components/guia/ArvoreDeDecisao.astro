@@ -1,0 +1,147 @@
+---
+/**
+ * ÁRVORE DE DECISÃO — perguntas de sim/não que levam a uma ação recomendada.
+ *
+ *   <ArvoreDeDecisao titulo="A bezerra mamou?" arvore={{
+ *     pergunta: "A bezerra mamou nas primeiras 2 horas?",
+ *     sim: { acao: "Observe e registre." },
+ *     nao: {
+ *       pergunta: "Há colostro de boa qualidade?",
+ *       sim: { acao: "Forneça com mamadeira." },
+ *       nao: { acao: "Use colostro congelado." },
+ *     },
+ *   }} />
+ *
+ * Sem JavaScript: a árvore inteira em <details> aninhados (Sim / Não).
+ * Com JavaScript: uma pergunta por vez, com as respostas dadas e "Recomeçar".
+ */
+import ArvoreNo, { type NoDaArvore } from './ArvoreNo.astro';
+
+interface Props { titulo?: string; arvore: NoDaArvore }
+const { titulo = 'Árvore de decisão', arvore } = Astro.props;
+// Nome dos grupos de <details>, derivado do conteúdo para o build ser sempre igual
+let h = 0;
+for (const c of JSON.stringify(arvore)) h = (h * 31 + c.charCodeAt(0)) | 0;
+const grupo = `arvore-${(h >>> 0).toString(36)}`;
+---
+<section class="arvore" data-arvore={JSON.stringify(arvore)}>
+  <p class="rotulo">Árvore de decisão</p>
+  <h4>{titulo}</h4>
+  <div class="estatica">
+    <ArvoreNo no={arvore} grupo={grupo} />
+  </div>
+  <div class="passo" hidden aria-live="polite"></div>
+</section>
+
+<script>
+  type No = { pergunta: string; sim: No; nao: No } | { acao: string };
+
+  // Uma pergunta por vez. A versão em <details> continua no HTML para quem
+  // está sem JavaScript; aqui ela é escondida e trocada pelo passo a passo.
+  document.querySelectorAll<HTMLElement>('.arvore').forEach((caixa) => {
+    const raiz: No = JSON.parse(caixa.dataset.arvore!);
+    const estatica = caixa.querySelector<HTMLElement>('.estatica')!;
+    const passo = caixa.querySelector<HTMLElement>('.passo')!;
+    const respostas: { pergunta: string; sim: boolean }[] = [];
+    let atual: No = raiz;
+
+    const el = (tag: string, classe: string, texto?: string) => {
+      const e = document.createElement(tag);
+      if (classe) e.className = classe;
+      if (texto) e.textContent = texto;
+      return e;
+    };
+
+    const desenhar = (focar: boolean) => {
+      passo.replaceChildren();
+      if (respostas.length) {
+        const lista = el('ol', 'respostas');
+        respostas.forEach((r) => {
+          const li = el('li', '', r.pergunta + ' ');
+          li.append(el('strong', '', r.sim ? 'Sim' : 'Não'));
+          lista.append(li);
+        });
+        passo.append(lista);
+      }
+      let alvo: HTMLElement;
+      if ('acao' in atual) {
+        alvo = el('p', 'acao');
+        alvo.append(el('span', 'rotulo', 'Ação recomendada'), atual.acao);
+        passo.append(alvo);
+      } else {
+        const no = atual;
+        alvo = el('p', 'pergunta', no.pergunta);
+        const botoes = el('div', 'botoes');
+        for (const sim of [true, false]) {
+          const b = el('button', 'botao secundario', sim ? 'Sim' : 'Não') as HTMLButtonElement;
+          b.type = 'button';
+          b.addEventListener('click', () => {
+            respostas.push({ pergunta: no.pergunta, sim });
+            atual = sim ? no.sim : no.nao;
+            desenhar(true);
+          });
+          botoes.append(b);
+        }
+        passo.append(alvo, botoes);
+      }
+      if (respostas.length) {
+        const recomecar = el('button', 'recomecar', 'Recomeçar') as HTMLButtonElement;
+        recomecar.type = 'button';
+        recomecar.addEventListener('click', () => {
+          respostas.length = 0;
+          atual = raiz;
+          desenhar(true);
+        });
+        passo.append(recomecar);
+      }
+      // Leva o foco do teclado (e do leitor de tela) para a nova pergunta ou ação
+      alvo.tabIndex = -1;
+      if (focar) alvo.focus();
+    };
+
+    estatica.hidden = true;
+    passo.hidden = false;
+    desenhar(false);
+  });
+</script>
+
+<style>
+  .arvore { border: 1px solid var(--borda); border-radius: var(--raio); padding: 1.1rem 1.25rem 1.25rem; margin: 1.75rem 0; background: var(--superficie); }
+  .rotulo { color: var(--terra); }
+  h4 { margin: .15rem 0 .75rem; font-size: 1.25rem; }
+
+  .arvore :global(.pergunta) { font-weight: 700; font-size: 1.15rem; margin: .5rem 0 .6rem; }
+  .arvore :global(.pergunta:focus) { outline: none; }
+  .arvore :global(.pergunta:focus-visible) { outline: 3px solid var(--ceu); }
+  .arvore :global(.acao) {
+    display: grid; gap: .2rem; margin: .5rem 0 0; padding: .9rem 1.1rem;
+    background: var(--pasto-tinta); border-radius: var(--raio); font-size: 1.1rem;
+  }
+  .arvore :global(.acao .rotulo) { color: var(--pasto); }
+
+  /* Sem JavaScript: cada resposta é um <details> com cara de botão */
+  .arvore :global(details) { margin: .5rem 0; }
+  .arvore :global(summary) {
+    display: flex; align-items: center; min-height: 2.75rem; padding: .5rem 1rem;
+    border-radius: var(--raio); box-shadow: inset 0 0 0 1.5px var(--pasto);
+    color: var(--pasto); font-weight: 700; cursor: pointer; list-style: none;
+  }
+  .arvore :global(summary::-webkit-details-marker) { display: none; }
+  .arvore :global(summary)::before { content: '+'; width: 1.25rem; font-weight: 700; }
+  .arvore :global(details[open] > summary) { background: var(--pasto); color: var(--sobre-pasto); }
+  .arvore :global(details[open] > summary)::before { content: '–'; }
+  .arvore :global(details > .no), .arvore :global(details > .acao) { margin-top: .75rem; }
+
+  /* Com JavaScript: uma pergunta por vez */
+  .arvore :global(.respostas) {
+    margin: 0 0 .75rem; padding: 0 0 .75rem; list-style: none; border-bottom: 1px dashed var(--borda);
+    font-size: var(--t-pequeno); color: var(--tinta-suave); display: grid; gap: .25rem;
+  }
+  .arvore :global(.respostas strong) { color: var(--tinta); }
+  .arvore :global(.botoes) { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+  .arvore :global(.botoes .botao) { justify-content: center; min-height: 3rem; font-size: 1.1rem; cursor: pointer; }
+  .arvore :global(.recomecar) {
+    margin-top: .9rem; min-height: 2.75rem; padding: .5rem .25rem; background: none; border: 0;
+    color: var(--ceu); font: 700 1rem var(--fonte-texto); text-decoration: underline; text-underline-offset: 3px; cursor: pointer;
+  }
+</style>

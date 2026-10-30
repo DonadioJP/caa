@@ -69,6 +69,20 @@ Faltam estudos sobre o manejo de colostro em sistemas agroecológicos e com perm
 Congele em sacos planos o colostro excedente de boa qualidade. Eles descongelam mais rápido em banho-maria do que garrafas.
 </Dica>
 
+{/* Exemplo do componente: revisar a lógica e os critérios antes de publicar. */}
+<ArvoreDeDecisao
+  titulo="[Exemplo] A bezerra recém-nascida já mamou?"
+  arvore={{
+    pergunta: "A bezerra mamou sozinha logo após o nascimento?",
+    sim: { acao: "Confira se a mamada foi efetiva e registre o horário na ficha." },
+    nao: {
+      pergunta: "Há colostro da mãe avaliado como de boa qualidade no refratômetro?",
+      sim: { acao: "Forneça esse colostro com mamadeira ou sonda, no volume indicado pela calculadora." },
+      nao: { acao: "Use colostro congelado de boa qualidade do banco da propriedade." },
+    },
+  }}
+/>
+
 ## Exemplo real
 
 <ExemploReal tipo="entrevista" nome="[Nome da pessoa]" funcao="[Produtora de leite]" local="[Município (UF)]">

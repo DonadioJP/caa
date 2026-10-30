@@ -6,5 +6,6 @@ import Protocolo from './Protocolo.astro';
 import Checklist from './Checklist.astro';
 import Dica from './Dica.astro';
 import ExemploReal from './ExemploReal.astro';
+import ArvoreDeDecisao from './ArvoreDeDecisao.astro';
 
-export const componentesDoGuia = { Aviso, Protocolo, Checklist, Dica, ExemploReal };
+export const componentesDoGuia = { Aviso, Protocolo, Checklist, Dica, ExemploReal, ArvoreDeDecisao };

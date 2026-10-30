@@ -35,7 +35,7 @@ Astro (site estático) + MDX, Reveal.js (aulas), rehype-citation (citações a p
 - **Taxonomia**: `src/data/taxonomia.ts` define seções, guias planejados (`planejados`) e materiais (`materiais`: ferramentas, Open Machines, apresentações, histórias). O slug planejado deve ser igual ao nome da pasta do guia.
 - **Mapa da página inicial**: destinos em `src/data/mapa.ts`, desenho em `src/components/marca/MapaPropriedade.astro`.
 - **Calculadoras**: `src/data/ferramentas.yaml`; código R em `ferramentas-shiny/<id>/app.R`, exportado com shinylive para `public/ferramentas/<id>/`.
-- **Componentes do guia** (usáveis no MDX sem importar): `Protocolo`, `Checklist`, `Dica`, `Aviso`, `ExemploReal`. Ficam em `src/components/guia/` e são registrados em `src/components/guia/index.ts`.
+- **Componentes do guia** (usáveis no MDX sem importar): `Protocolo`, `Checklist`, `Dica`, `Aviso`, `ExemploReal`, `ArvoreDeDecisao`. Ficam em `src/components/guia/` e são registrados em `src/components/guia/index.ts`.
 - **Painel de produção** em `/painel/`: compara o planejado com o publicado.
 - Rascunhos (`rascunho: true`) aparecem só no `npm run dev`.
 
@@ -44,7 +44,7 @@ Astro (site estático) + MDX, Reveal.js (aulas), rehype-citation (citações a p
 Ordem: cabeçalho (título, tags) → botões "Iniciar aula" e "Resumo em PDF" → **A ciência por trás** → **Práticas no campo** → **Exemplo real** → **Calculadora** → **Referências** → **Caderno de Campo** (opcional, em `caderno.md`; o layout o põe sempre no fim da página).
 
 - *A ciência por trás*, com subestrutura fixa: Contexto e importância; Mecanismos; Resumo das evidências; Controvérsias, lacunas e limitações; Direções futuras.
-- *Práticas no campo*: protocolos numerados, métodos e equipamentos, checklists, árvores de decisão, dicas, links para guias relacionados.
+- *Práticas no campo*: protocolos numerados, métodos e equipamentos, checklists, árvores de decisão (`<ArvoreDeDecisao arvore={{ pergunta, sim, nao }}>`, folhas com `acao`; funciona sem JavaScript), dicas, links para guias relacionados.
 - *Exemplo real*: componente `<ExemploReal>` com `tipo="video"` (URL de incorporação do PeerTube, título, legenda), `tipo="entrevista"` (citação no corpo; nome, função, local) ou `tipo="estudo"` (título, contexto, feito, resultados). Cor `--ceu`.
 - *Referências*: tabela gerada automaticamente com Referência (APA), Achado principal e Link (DOI). O achado vem do campo `achados` do frontmatter (chave do `.bib` → frase curta); se faltar, a tabela mostra "—" e o build avisa. As citações no texto levam à linha da referência.
 - Cada guia tem "Em 1 minuto" (2 a 5 frases para o produtor) e um selo de evidência (`forte`, `moderada`, `limitada`, `posicionamento`).
@@ -95,4 +95,4 @@ Produtores rurais no celular, com sinal fraco. Páginas leves, nada que dependa 
 
 ## Pendências
 
-A lista atualizada fica no fim do `README.md`. Próximo passo combinado: completar o modelo de guia (PDF de resumo, Árvore de decisão). Feito: Caderno de Campo no fim da página, tabela de referências com achado principal, Exemplo real.
+A lista atualizada fica no fim do `README.md`. Próximo passo combinado: completar o modelo de guia (PDF de resumo). Feito: Caderno de Campo no fim da página, tabela de referências com achado principal, Exemplo real, Árvore de decisão.

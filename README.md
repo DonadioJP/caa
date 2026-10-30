@@ -107,6 +107,22 @@ O trecho da entrevista vai aqui dentro.
   resultados="O que se observou." />
 ```
 
+Para decisões no campo, use `<ArvoreDeDecisao>`: perguntas de sim/não que levam a uma ação recomendada. Cada nó tem `pergunta`, `sim` e `nao`, ou é uma folha com `acao`:
+
+```mdx
+<ArvoreDeDecisao titulo="A bezerra já mamou?" arvore={{
+  pergunta: "A bezerra mamou sozinha?",
+  sim: { acao: "Registre o horário na ficha." },
+  nao: {
+    pergunta: "Há colostro bom da mãe?",
+    sim: { acao: "Forneça com mamadeira." },
+    nao: { acao: "Use colostro congelado." },
+  },
+}} />
+```
+
+Sem JavaScript a árvore aparece inteira, em blocos Sim/Não que abrem e fecham; com JavaScript, uma pergunta por vez, com as respostas dadas e o botão "Recomeçar".
+
 Citações como no Quarto: `[@godden2008]`. As referências citadas aparecem automaticamente no fim da página, numa tabela com três colunas: Referência (APA), Achado principal e Link (DOI ou URL). O achado vem do frontmatter:
 
 ```yaml
@@ -204,12 +220,12 @@ O **painel de produção** em `/painel/` compara os guias planejados (em `taxono
 ## Pendências
 
 - [ ] Template do resumo em PDF
-- [ ] Componente de árvore de decisão
 - [ ] Primeira calculadora (colostro)
 - [x] Repositório público e hospedagem aberta (GitHub Pages, publicação automática a cada push)
 - [x] Caderno de Campo no fim da página do guia (`caderno.md`)
 - [x] Tabela de referências com achado principal (`achados`)
 - [x] Componente Exemplo real (vídeo, entrevista, estudo de caso)
+- [x] Componente de árvore de decisão
 - [ ] Escolher a instância do PeerTube para o CAATube
 - [ ] Configurar exportação automática do Zotero para `bibliografia/biblioteca.bib`
 - [ ] Substituir o conteúdo de exemplo do guia de colostro
