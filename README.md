@@ -91,6 +91,22 @@ No corpo, use os componentes sem importar nada:
 <Dica>Truque de campo.</Dica>
 ```
 
+Na seção **Exemplo real** (entre Práticas no campo e a Calculadora), use `<ExemploReal>` em uma de três variantes:
+
+```mdx
+<ExemploReal tipo="video" url="https://peertube.watch/videos/embed/<id>"
+  titulo="Ordenha do colostro" legenda="Onde e quando foi gravado." />
+
+<ExemploReal tipo="entrevista" nome="Nome" funcao="Produtora de leite" local="Município (UF)">
+O trecho da entrevista vai aqui dentro.
+</ExemploReal>
+
+<ExemploReal tipo="estudo" titulo="Título do caso"
+  contexto="Quem, onde, qual era o problema."
+  feito="O que foi feito."
+  resultados="O que se observou." />
+```
+
 Citações como no Quarto: `[@godden2008]`. As referências citadas aparecem automaticamente no fim da página, numa tabela com três colunas: Referência (APA), Achado principal e Link (DOI ou URL). O achado vem do frontmatter:
 
 ```yaml
@@ -193,6 +209,7 @@ O **painel de produção** em `/painel/` compara os guias planejados (em `taxono
 - [x] Repositório público e hospedagem aberta (GitHub Pages, publicação automática a cada push)
 - [x] Caderno de Campo no fim da página do guia (`caderno.md`)
 - [x] Tabela de referências com achado principal (`achados`)
+- [x] Componente Exemplo real (vídeo, entrevista, estudo de caso)
 - [ ] Escolher a instância do PeerTube para o CAATube
 - [ ] Configurar exportação automática do Zotero para `bibliografia/biblioteca.bib`
 - [ ] Substituir o conteúdo de exemplo do guia de colostro

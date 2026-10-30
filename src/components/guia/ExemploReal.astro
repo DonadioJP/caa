@@ -1,0 +1,82 @@
+---
+/**
+ * EXEMPLO REAL — bloco da seção "Exemplo real" (entre Práticas no campo e a
+ * Calculadora). Três variantes:
+ *
+ *   <ExemploReal tipo="video" url="https://peertube.watch/videos/embed/<id>"
+ *     titulo="Ordenha do colostro" legenda="Gravado no Sítio..." />
+ *
+ *   <ExemploReal tipo="entrevista" nome="Maria" funcao="Produtora" local="Pinhalão (PR)">
+ *     A citação vai aqui dentro.
+ *   </ExemploReal>
+ *
+ *   <ExemploReal tipo="estudo" titulo="Banco de colostro no Sítio X"
+ *     contexto="..." feito="..." resultados="..." />
+ */
+type Props =
+  | { tipo: 'video'; url: string; titulo: string; legenda?: string }
+  | { tipo: 'entrevista'; nome: string; funcao?: string; local?: string }
+  | { tipo: 'estudo'; titulo: string; contexto: string; feito: string; resultados: string };
+
+const p = Astro.props;
+const rotulo = { video: 'Vídeo', entrevista: 'Entrevista', estudo: 'Estudo de caso' }[p.tipo];
+---
+<section class="exemplo">
+  <p class="rotulo">Exemplo real · {rotulo}</p>
+
+  {p.tipo === 'video' && (
+    <figure>
+      <h4>{p.titulo}</h4>
+      <div class="video">
+        <iframe src={p.url} title={`Vídeo: ${p.titulo}`} loading="lazy" allowfullscreen
+          sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+      </div>
+      {p.legenda && <figcaption>{p.legenda}</figcaption>}
+    </figure>
+  )}
+
+  {p.tipo === 'entrevista' && (
+    <figure>
+      <blockquote><slot /></blockquote>
+      <figcaption>
+        <strong>{p.nome}</strong>{[p.funcao, p.local].filter(Boolean).map((t) => <span>{t}</span>)}
+      </figcaption>
+    </figure>
+  )}
+
+  {p.tipo === 'estudo' && (
+    <>
+      <h4>{p.titulo}</h4>
+      <dl>
+        <dt>Contexto</dt><dd>{p.contexto}</dd>
+        <dt>O que foi feito</dt><dd>{p.feito}</dd>
+        <dt>Resultados</dt><dd>{p.resultados}</dd>
+      </dl>
+    </>
+  )}
+</section>
+
+<style>
+  .exemplo { background: var(--ceu-tinta); border-radius: var(--raio); padding: 1.1rem 1.25rem 1.25rem; margin: 1.75rem 0; }
+  .rotulo { color: var(--ceu); }
+  h4 { margin: .15rem 0 .75rem; font-size: 1.25rem; }
+  figure { margin: 0; }
+  figcaption { margin-top: .6rem; font-size: var(--t-pequeno); color: var(--tinta-suave); }
+
+  .video { aspect-ratio: 16 / 9; border-radius: var(--raio); overflow: hidden; background: #000; }
+  iframe { width: 100%; height: 100%; border: 0; }
+
+  blockquote {
+    margin: .6rem 0 0; font-family: var(--fonte-titulo); font-style: italic; font-size: 1.3rem; line-height: 1.5;
+  }
+  blockquote :global(p) { margin: 0 0 .5rem; }
+  blockquote :global(p:first-child)::before { content: '“'; }
+  blockquote :global(p:last-child)::after { content: '”'; }
+  figcaption strong { color: var(--tinta); font-size: 1rem; }
+  figcaption span::before { content: ' · '; }
+
+  dl { margin: 0; display: grid; gap: .2rem; }
+  dt { font-weight: 700; color: var(--ceu); margin-top: .5rem; }
+  dt:first-child { margin-top: 0; }
+  dd { margin: 0; }
+</style>
